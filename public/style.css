@@ -600,8 +600,8 @@ body {
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Show backdrop when open */
-  .backdrop { display: block; }
+  /* Show backdrop only when sheet is open */
+  .backdrop.open { display: block; }
 
   /* Show cart bar */
   .cart-bar { display: flex; }
