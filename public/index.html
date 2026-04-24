@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Dharmi Ice Cream &amp; Kulfi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -21,18 +21,23 @@
 
   <div class="app">
 
-    <!-- ── Menu Panel ── -->
+    <!-- Menu Panel (full width on mobile) -->
     <div class="menu-panel">
       <div class="categories" id="categories"></div>
       <div class="items-grid" id="items-grid"></div>
     </div>
 
-    <!-- ── Order Panel ── -->
-    <div class="order-panel">
+    <!-- Desktop: sidebar order panel -->
+    <div class="order-panel" id="order-panel">
+
+      <div class="sheet-handle"></div>
 
       <div class="order-head">
         <span class="order-title">🛒 Current Order</span>
-        <span class="order-badge" id="order-badge"></span>
+        <div class="order-head-actions">
+          <span class="order-badge" id="order-badge"></span>
+          <button class="close-btn" onclick="closeSheet()" aria-label="Close">✕</button>
+        </div>
       </div>
 
       <div class="order-list" id="order-list">
@@ -43,7 +48,6 @@
       </div>
 
       <div class="order-foot">
-        <div class="divider"></div>
         <div class="total-row">
           <span class="total-label">Total Amount</span>
           <span class="total-val" id="total-val">₹0</span>
@@ -55,11 +59,23 @@
       </div>
 
     </div>
+  </div>
 
+  <!-- Mobile only: backdrop + cart bar -->
+  <div class="backdrop" id="backdrop" onclick="closeSheet()"></div>
+
+  <div class="cart-bar" id="cart-bar" onclick="openSheet()">
+    <div class="cart-bar-left">
+      <span class="cart-bar-icon">🛒</span>
+      <span id="cart-bar-count">0 items</span>
+    </div>
+    <div class="cart-bar-right">
+      <strong id="cart-bar-total">₹0</strong>
+      <span class="cart-bar-cta">View Order ›</span>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
-
   <script src="app.js"></script>
 </body>
 </html>
