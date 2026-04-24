@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders — Dharmi Ice Cream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink:    #E91E8C;
+      --coral:   #FF6B6B;
+      --bg:      #FFF0F7;
+      --surface: #FFFFFF;
+      --border:  #F2D5E8;
+      --text:    #1A0A12;
+      --text-2:  #6B4F5E;
+      --muted:   #C0A0B4;
+      --grad:    linear-gradient(135deg, #E91E8C, #FF6B6B);
+      --shadow:  0 2px 14px rgba(233,30,140,0.10);
+      --r:       12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .header {
+      background: var(--grad);
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 20px rgba(233,30,140,0.30);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-btn {
+      background: rgba(255,255,255,0.20);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.32); }
+
+    .header-info { flex: 1; }
+    .header-title { font-size: 1.05rem; font-weight: 800; }
+    .header-sub   { font-size: 0.72rem; opacity: 0.85; }
+
+    .refresh-btn {
+      background: rgba(255,255,255,0.20);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .refresh-btn:hover { background: rgba(255,255,255,0.32); }
+
+    /* Content */
+    .content { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+
+    /* Stats row */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 2px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Table */
+    .table-wrap {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+
+    thead {
+      background: var(--grad);
+      color: white;
+    }
+
+    th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.4px;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text);
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td { background: #FFF8FC; }
+
+    .order-id {
+      font-weight: 700;
+      color: var(--pink);
+      white-space: nowrap;
+    }
+
+    .datetime {
+      color: var(--text-2);
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .items-cell { line-height: 1.5; color: var(--text-2); }
+
+    .total-cell {
+      font-weight: 800;
+      color: var(--pink);
+      white-space: nowrap;
+    }
+
+    /* States */
+    .loading, .empty, .error {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .state-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .state-msg  { font-size: 0.9rem; font-weight: 500; }
+
+    .error { color: #C2185B; }
+
+    /* Mobile */
+    @media (max-width: 580px) {
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-val { font-size: 1.2rem; }
+      th:nth-child(2), td:nth-child(2) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a class="back-btn" href="/" title="Back to POS">&#8592;</a>
+    <div class="header-info">
+      <div class="header-title">🍦 Orders History</div>
+      <div class="header-sub">Dharmi Ice Cream &amp; Kulfi</div>
+    </div>
+    <button class="refresh-btn" onclick="loadOrders()">&#8635; Refresh</button>
+  </header>
+
+  <div class="content">
+
+    <div class="stats" id="stats" style="display:none">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-count">0</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-revenue">₹0</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-avg">₹0</div>
+        <div class="stat-label">Avg Order Value</div>
+      </div>
+    </div>
+
+    <div class="table-wrap" id="table-wrap">
+      <div class="loading">
+        <div class="state-icon">⏳</div>
+        <div class="state-msg">Loading orders…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    async function loadOrders() {
+      const wrap = document.getElementById('table-wrap');
+      wrap.innerHTML = `<div class="loading"><div class="state-icon">⏳</div><div class="state-msg">Loading orders…</div></div>`;
+      document.getElementById('stats').style.display = 'none';
+
+      try {
+        const res = await fetch('/api/orders');
+        if (!res.ok) throw new Error('Server error');
+        const orders = await res.json();
+
+        if (orders.length === 0) {
+          wrap.innerHTML = `<div class="empty"><div class="state-icon">🍧</div><div class="state-msg">No orders yet.<br/>Place your first order from the POS.</div></div>`;
+          return;
+        }
+
+        // Stats
+        const count   = orders.length;
+        const revenue = orders.reduce((s, o) => s + Number(o.total || 0), 0);
+        const avg     = Math.round(revenue / count);
+
+        document.getElementById('stat-count').textContent   = count;
+        document.getElementById('stat-revenue').textContent = `₹${revenue}`;
+        document.getElementById('stat-avg').textContent     = `₹${avg}`;
+        document.getElementById('stats').style.display      = 'grid';
+
+        wrap.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>#Order</th>
+                <th>Date &amp; Time</th>
+                <th>Items</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${orders.map(o => `
+                <tr>
+                  <td class="order-id">#${o.orderId}</td>
+                  <td class="datetime">${o.dateTime}</td>
+                  <td class="items-cell">${o.items}</td>
+                  <td class="total-cell">₹${o.total}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>`;
+      } catch (err) {
+        wrap.innerHTML = `<div class="error"><div class="state-icon">❌</div><div class="state-msg">Could not load orders.<br/>Check your Google Sheets credentials.</div></div>`;
+      }
+    }
+
+    loadOrders();
+  </script>
+
+</body>
+</html>

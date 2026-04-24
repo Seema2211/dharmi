@@ -1,0 +1,12 @@
+{
+  "name": "dharmi-icecream-pos",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "googleapis": "^144.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Dharmi Ice Cream &amp; Kulfi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="header">
+    <span class="header-icon">🍦</span>
+    <div class="header-text">
+      <div class="header-title">Dharmi Ice Cream &amp; Kulfi</div>
+      <div class="header-sub">Fresh &amp; Delicious Every Day</div>
+    </div>
+    <a class="orders-link" href="/orders.html">📋 Orders</a>
+  </header>
+
+  <div class="app">
+
+    <!-- ── Menu Panel ── -->
+    <div class="menu-panel">
+      <div class="categories" id="categories"></div>
+      <div class="items-grid" id="items-grid"></div>
+    </div>
+
+    <!-- ── Order Panel ── -->
+    <div class="order-panel">
+
+      <div class="order-head">
+        <span class="order-title">🛒 Current Order</span>
+        <span class="order-badge" id="order-badge"></span>
+      </div>
+
+      <div class="order-list" id="order-list">
+        <div class="empty-state">
+          <div class="empty-icon">🍧</div>
+          <div class="empty-msg">Tap items to add<br/>to your order</div>
+        </div>
+      </div>
+
+      <div class="order-foot">
+        <div class="divider"></div>
+        <div class="total-row">
+          <span class="total-label">Total Amount</span>
+          <span class="total-val" id="total-val">₹0</span>
+        </div>
+        <button class="btn-place" id="btn-place" onclick="placeOrder()" disabled>
+          Place Order
+        </button>
+        <button class="btn-clear" onclick="clearOrder()">Clear Order</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
