@@ -44,45 +44,30 @@
       box-shadow: 0 4px 20px rgba(233,30,140,0.30);
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 10;
     }
-
     .back-btn {
       background: rgba(255,255,255,0.22);
-      border: none;
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      flex-shrink: 0;
+      border: none; color: white;
+      width: 36px; height: 36px;
+      border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      text-decoration: none; flex-shrink: 0;
       transition: background 0.2s;
     }
     .back-btn:hover { background: rgba(255,255,255,0.35); }
-
-    .header-info { flex: 1; }
+    .header-info  { flex: 1; }
     .header-title { font-size: 1rem; font-weight: 800; }
     .header-sub   { font-size: 0.68rem; opacity: 0.85; }
-
     .refresh-btn {
       background: rgba(255,255,255,0.22);
-      border: none;
-      color: white;
-      padding: 7px 14px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      flex-shrink: 0;
+      border: none; color: white;
+      padding: 7px 14px; border-radius: 999px;
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; flex-shrink: 0; transition: background 0.2s;
     }
-    .refresh-btn:hover { background: rgba(255,255,255,0.35); }
+    .refresh-btn:hover    { background: rgba(255,255,255,0.35); }
     .refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     /* ── Content ── */
@@ -92,260 +77,321 @@
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 10px; margin-bottom: 20px;
     }
-
     .stat-card {
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: var(--r);
-      padding: 14px 12px;
-      text-align: center;
+      padding: 14px 12px; text-align: center;
       box-shadow: var(--shadow);
     }
-
     .stat-val {
-      font-size: 1.4rem;
-      font-weight: 800;
+      font-size: 1.4rem; font-weight: 800;
       background: var(--grad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.2;
+      background-clip: text; line-height: 1.2;
     }
+    .stat-label { font-size: 0.68rem; font-weight: 600; color: var(--muted); margin-top: 3px; }
 
-    .stat-label {
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin-top: 3px;
-      letter-spacing: 0.3px;
-    }
-
-    /* ── Table ── */
+    /* ── Orders Table ── */
     .table-wrap {
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+      box-shadow: var(--shadow); overflow: hidden;
     }
-
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-
     thead { background: var(--grad); color: white; }
-    th {
-      padding: 12px 14px;
-      text-align: left;
-      font-weight: 700;
-      font-size: 0.75rem;
-      letter-spacing: 0.4px;
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 11px 14px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-      color: var(--text);
-    }
+    th { padding: 12px 14px; text-align: left; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.4px; white-space: nowrap; }
+    td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr.deleting td   { background: var(--red-bg); transition: background 0.2s; }
+    .td-id    { font-weight: 700; color: var(--pink); white-space: nowrap; }
+    .td-dt    { color: var(--text-2); font-size: 0.76rem; white-space: nowrap; }
+    .td-items { color: var(--text-2); line-height: 1.5; }
+    .td-total { font-weight: 800; color: var(--pink); white-space: nowrap; }
+    .td-acts  { white-space: nowrap; }
 
-    .td-id   { font-weight: 700; color: var(--pink); white-space: nowrap; }
-    .td-dt   { color: var(--text-2); font-size: 0.76rem; white-space: nowrap; }
-    .td-items{ color: var(--text-2); line-height: 1.5; }
-    .td-total{ font-weight: 800; color: var(--pink); white-space: nowrap; }
-    .td-acts { white-space: nowrap; }
-
-    /* Action buttons */
     .btn-edit, .btn-del {
-      border: none;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-family: inherit;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
+      border: none; border-radius: 8px;
+      padding: 6px 12px; font-family: inherit;
+      font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; transition: opacity 0.2s;
     }
     .btn-edit { background: #EDE9FE; color: #7C3AED; margin-right: 6px; }
-    .btn-edit:hover { opacity: 0.85; }
     .btn-del  { background: var(--red-bg); color: var(--red); }
-    .btn-del:hover { opacity: 0.85; }
-    .btn-edit:disabled, .btn-del:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-edit:hover, .btn-del:hover { opacity: 0.78; }
 
-    /* ── States ── */
+    /* ── State boxes ── */
     .state-box { text-align: center; padding: 56px 20px; color: var(--muted); }
-    .state-icon{ font-size: 2.8rem; margin-bottom: 10px; }
-    .state-msg { font-size: 0.88rem; font-weight: 500; line-height: 1.6; }
+    .state-icon { font-size: 2.8rem; margin-bottom: 10px; }
+    .state-msg  { font-size: 0.88rem; font-weight: 500; line-height: 1.6; }
     .state-box.error { color: var(--red); }
 
-    /* ── Modal backdrop ── */
+    /* ════════════════════════════════════════
+       EDIT MODAL  (full mini-POS)
+    ════════════════════════════════════════ */
     .modal-bg {
       display: none;
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(26,10,18,0.55);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       z-index: 200;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
-      padding: 16px;
     }
     .modal-bg.open { display: flex; }
 
-    /* ── Edit Modal ── */
-    .modal {
+    .edit-modal {
       background: var(--surface);
-      border-radius: 18px;
       width: 100%;
-      max-width: 480px;
-      box-shadow: 0 20px 60px rgba(233,30,140,0.22);
+      max-width: 560px;
+      max-height: 92dvh;
+      border-radius: 22px 22px 0 0;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
-      animation: slideUp 0.25s ease;
+      animation: slideUp 0.30s cubic-bezier(0.32,0.72,0,1);
+      box-shadow: 0 -12px 48px rgba(233,30,140,0.22);
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
     }
 
+    /* Drag handle */
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 10px auto 0;
+      flex-shrink: 0;
+    }
+
+    /* Modal header */
     .modal-head {
       background: var(--grad);
       color: white;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
     }
-    .modal-title { font-size: 1rem; font-weight: 700; }
-    .modal-close {
-      background: rgba(255,255,255,0.22);
-      border: none;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .modal-title { flex: 1; font-size: 0.95rem; font-weight: 700; }
+    .modal-close-btn {
+      background: rgba(255,255,255,0.22); border: none; color: white;
+      width: 30px; height: 30px; border-radius: 50%;
+      font-size: 0.82rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
     }
 
-    .modal-body { padding: 20px; }
-
-    .field { margin-bottom: 16px; }
-    .field label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-2);
-      margin-bottom: 6px;
-    }
-    .field textarea, .field input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.85rem;
-      color: var(--text);
+    /* ── Current order items (inside edit modal) ── */
+    .edit-order-section {
+      flex-shrink: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid var(--border);
       background: var(--bg);
-      transition: border-color 0.2s;
-      outline: none;
-      resize: vertical;
-    }
-    .field textarea:focus, .field input:focus { border-color: var(--pink); }
-    .field textarea { min-height: 90px; }
-
-    .modal-foot {
-      padding: 0 20px 20px;
-      display: flex;
-      gap: 10px;
     }
 
-    .btn-cancel {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      color: var(--muted);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-cancel:hover { border-color: var(--pink); color: var(--pink); }
-
-    .btn-save {
-      flex: 2;
-      padding: 12px;
-      background: var(--grad);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.88rem;
+    .edit-order-label {
+      padding: 10px 16px 6px;
+      font-size: 0.72rem;
       font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(233,30,140,0.35);
-      transition: opacity 0.2s;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
-    .btn-save:hover   { opacity: 0.88; }
-    .btn-save:disabled{ opacity: 0.5; cursor: not-allowed; }
 
-    /* ── Delete Confirm Modal ── */
-    .del-modal {
-      background: var(--surface);
-      border-radius: 18px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 20px 60px rgba(239,68,68,0.20);
-      overflow: hidden;
-      animation: slideUp 0.25s ease;
+    .edit-empty-order {
       text-align: center;
-      padding: 28px 24px 24px;
+      padding: 16px;
+      color: var(--muted);
+      font-size: 0.8rem;
     }
 
-    .del-icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .edit-order-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .edit-order-item:last-child { border-bottom: none; }
+    .eoi-name  { flex: 1; font-size: 0.8rem; font-weight: 500; }
+    .eoi-total { min-width: 46px; text-align: right; font-size: 0.82rem; font-weight: 700; color: var(--pink); }
+
+    /* qty controls */
+    .qty-ctrl {
+      display: flex; align-items: center; gap: 3px;
+      background: var(--surface); border-radius: 999px; padding: 2px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    }
+    .qty-btn {
+      width: 26px; height: 26px; border: none; border-radius: 50%;
+      background: transparent; color: var(--pink);
+      font-size: 1rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent; line-height: 1;
+    }
+    .qty-btn:hover { background: var(--pink); color: white; }
+    .qty-num { min-width: 22px; text-align: center; font-size: 0.82rem; font-weight: 700; }
+
+    /* ── Total + Save bar ── */
+    .edit-total-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+      flex-shrink: 0;
+      background: var(--surface);
+      gap: 12px;
+    }
+    .edit-total-label { font-size: 0.82rem; font-weight: 600; color: var(--text-2); }
+    .edit-total-val   {
+      font-size: 1.3rem; font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .btn-save {
+      padding: 10px 20px;
+      background: var(--grad); color: white;
+      border: none; border-radius: 10px;
+      font-family: inherit; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      box-shadow: 0 3px 12px rgba(233,30,140,0.35);
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-save:hover    { opacity: 0.88; }
+    .btn-save:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ── Menu section (inside edit modal) ── */
+    .edit-menu-section {
+      display: flex; flex-direction: column;
+      flex: 1; min-height: 0; overflow: hidden;
+    }
+
+    .edit-menu-label {
+      padding: 10px 16px 6px;
+      font-size: 0.72rem; font-weight: 700;
+      color: var(--muted); letter-spacing: 0.5px;
+      text-transform: uppercase; flex-shrink: 0;
+      background: var(--surface);
+    }
+
+    /* Category tabs */
+    .edit-cats {
+      display: flex; gap: 7px;
+      padding: 6px 14px 10px;
+      overflow-x: auto; flex-shrink: 0;
+      scrollbar-width: none;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+    .edit-cats::-webkit-scrollbar { display: none; }
+    .edit-cat-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 7px 16px; border: 2px solid var(--border);
+      background: var(--surface); color: var(--text-2);
+      border-radius: 999px; font-family: inherit;
+      font-size: 0.8rem; font-weight: 600;
+      white-space: nowrap; cursor: pointer;
+      transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+    }
+    .edit-cat-btn.active {
+      background: var(--grad); border-color: transparent;
+      color: white; box-shadow: 0 3px 10px rgba(233,30,140,0.30);
+    }
+
+    /* Item grid */
+    .edit-items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 9px; padding: 12px;
+      overflow-y: auto; flex: 1;
+      align-content: start;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .edit-item-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 10px 10px;
+      cursor: pointer;
+      display: flex; flex-direction: column; gap: 8px;
+      box-shadow: 0 2px 8px rgba(233,30,140,0.07);
+      transition: transform 0.15s, border-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .edit-item-card:hover  { border-color: var(--pink); transform: translateY(-2px); }
+    .edit-item-card:active { transform: scale(0.96); }
+
+    @keyframes miniPop {
+      0%  { transform: scale(1); }
+      45% { transform: scale(1.07); }
+      100%{ transform: scale(1); }
+    }
+    .edit-item-card.pop { animation: miniPop 0.2s ease forwards; }
+
+    .eic-name  { font-size: 0.78rem; font-weight: 600; line-height: 1.3; }
+    .eic-foot  { display: flex; align-items: center; justify-content: space-between; }
+    .eic-price {
+      font-size: 0.85rem; font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .eic-plus {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--grad); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700;
+      box-shadow: 0 2px 6px rgba(233,30,140,0.35);
+    }
+
+    /* ════════════════════════════════════════
+       DELETE CONFIRM MODAL
+    ════════════════════════════════════════ */
+    .del-modal-bg {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,10,18,0.55);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      z-index: 300;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .del-modal-bg.open { display: flex; }
+    .del-modal {
+      background: var(--surface); border-radius: 18px;
+      width: 100%; max-width: 340px;
+      padding: 28px 24px 22px; text-align: center;
+      box-shadow: 0 20px 60px rgba(239,68,68,0.20);
+      animation: slideUp 0.22s ease;
+    }
+    .del-icon  { font-size: 2.4rem; margin-bottom: 12px; }
     .del-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
     .del-msg   { font-size: 0.82rem; color: var(--text-2); margin-bottom: 22px; line-height: 1.6; }
-
     .del-actions { display: flex; gap: 10px; }
-
     .btn-del-cancel {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      color: var(--muted);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 1; padding: 12px; background: transparent;
+      color: var(--muted); border: 1.5px solid var(--border);
+      border-radius: 10px; font-family: inherit;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
     }
     .btn-del-cancel:hover { border-color: var(--pink); color: var(--pink); }
-
     .btn-del-confirm {
-      flex: 1;
-      padding: 12px;
-      background: var(--red);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(239,68,68,0.35);
+      flex: 1; padding: 12px; background: var(--red);
+      color: white; border: none; border-radius: 10px;
+      font-family: inherit; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; box-shadow: 0 3px 12px rgba(239,68,68,0.35);
       transition: opacity 0.2s;
     }
     .btn-del-confirm:hover    { opacity: 0.88; }
@@ -353,40 +399,33 @@
 
     /* ── Toast ── */
     .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(12px);
-      background: #1A0A12EE;
-      color: white;
-      padding: 11px 26px;
-      border-radius: 999px;
-      font-size: 0.86rem;
-      font-weight: 500;
-      z-index: 999;
-      opacity: 0;
-      pointer-events: none;
+      background: #1A0A12EE; color: white;
+      padding: 11px 26px; border-radius: 999px;
+      font-size: 0.86rem; font-weight: 500;
+      z-index: 999; opacity: 0; pointer-events: none;
       transition: opacity 0.25s, transform 0.25s;
-      white-space: nowrap;
-      max-width: 90vw;
-      text-align: center;
+      white-space: nowrap; max-width: 90vw; text-align: center;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* ── Mobile ── */
-    @media (max-width: 560px) {
-      .stats { gap: 8px; }
-      .stat-val { font-size: 1.15rem; }
-      .stat-label { font-size: 0.62rem; }
+    @media (max-width: 540px) {
+      .stats       { gap: 8px; }
+      .stat-val    { font-size: 1.1rem; }
+      .stat-label  { font-size: 0.62rem; }
       th:nth-child(2), td:nth-child(2) { display: none; }
-      .btn-edit, .btn-del { padding: 6px 9px; }
+
+      .edit-modal  { max-height: 96dvh; border-radius: 20px 20px 0 0; }
+      .edit-items-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
   <header class="header">
-    <a class="back-btn" href="/" title="Back to POS">&#8592;</a>
+    <a class="back-btn" href="/">&#8592;</a>
     <div class="header-info">
       <div class="header-title">🍦 Orders History</div>
       <div class="header-sub">Dharmi Ice Cream &amp; Kulfi</div>
@@ -395,57 +434,53 @@
   </header>
 
   <div class="content">
-
     <div class="stats" id="stats" style="display:none">
-      <div class="stat-card">
-        <div class="stat-val" id="stat-count">0</div>
-        <div class="stat-label">Total Orders</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="stat-revenue">₹0</div>
-        <div class="stat-label">Total Revenue</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="stat-avg">₹0</div>
-        <div class="stat-label">Avg Order Value</div>
-      </div>
+      <div class="stat-card"><div class="stat-val" id="stat-count">0</div><div class="stat-label">Total Orders</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-revenue">₹0</div><div class="stat-label">Total Revenue</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-avg">₹0</div><div class="stat-label">Avg Order Value</div></div>
     </div>
-
     <div class="table-wrap" id="table-wrap">
-      <div class="state-box">
-        <div class="state-icon">⏳</div>
-        <div class="state-msg">Loading orders…</div>
-      </div>
+      <div class="state-box"><div class="state-icon">⏳</div><div class="state-msg">Loading orders…</div></div>
     </div>
-
   </div>
 
-  <!-- ── Edit Modal ── -->
+  <!-- ════ EDIT MODAL ════ -->
   <div class="modal-bg" id="edit-modal-bg">
-    <div class="modal">
+    <div class="edit-modal">
+      <div class="modal-handle"></div>
+
       <div class="modal-head">
         <span class="modal-title" id="edit-modal-title">Edit Order</span>
-        <button class="modal-close" onclick="closeEditModal()">✕</button>
+        <button class="modal-close-btn" onclick="closeEditModal()">✕</button>
       </div>
-      <div class="modal-body">
-        <div class="field">
-          <label>Items</label>
-          <textarea id="edit-items" placeholder="e.g. Kaju Anjir x2, Mango Kulfi x1"></textarea>
-        </div>
-        <div class="field">
-          <label>Total Amount (₹)</label>
-          <input type="number" id="edit-total" min="0" placeholder="e.g. 165" />
-        </div>
+
+      <!-- Current order items -->
+      <div class="edit-order-section">
+        <div class="edit-order-label">Current Order</div>
+        <div id="edit-order-list"></div>
       </div>
-      <div class="modal-foot">
-        <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+
+      <!-- Total + Save -->
+      <div class="edit-total-bar">
+        <div>
+          <div class="edit-total-label">Total Amount</div>
+          <div class="edit-total-val" id="edit-total-val">₹0</div>
+        </div>
         <button class="btn-save" id="btn-save" onclick="saveEdit()">Save Changes</button>
       </div>
+
+      <!-- Add from menu -->
+      <div class="edit-menu-section">
+        <div class="edit-menu-label">Add Items from Menu</div>
+        <div class="edit-cats" id="edit-cats"></div>
+        <div class="edit-items-grid" id="edit-items-grid"></div>
+      </div>
+
     </div>
   </div>
 
-  <!-- ── Delete Confirm Modal ── -->
-  <div class="modal-bg" id="del-modal-bg">
+  <!-- ════ DELETE MODAL ════ -->
+  <div class="del-modal-bg" id="del-modal-bg">
     <div class="del-modal">
       <div class="del-icon">🗑️</div>
       <div class="del-title" id="del-modal-title">Delete Order?</div>
@@ -460,16 +495,23 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    let allOrders = [];
+    const CAT_META = { 'Kulfi': '🍧', 'Ice Cream': '🍦', 'Lassi': '🥛' };
+
+    let allOrders      = [];
+    let menuData       = [];
+    let editItems      = [];   // [{id, name, price, qty}]
     let editingOrderId = null;
+    let editActiveCat  = '';
     let deletingOrderId = null;
 
-    /* ── Load ── */
+    /* ══ Load menu once ══ */
+    fetch('/menu.json').then(r => r.json()).then(d => { menuData = d; });
+
+    /* ══ Load orders ══ */
     async function loadOrders() {
       const wrap = document.getElementById('table-wrap');
       const btn  = document.getElementById('refresh-btn');
-      btn.disabled = true;
-      btn.textContent = '⏳ Loading…';
+      btn.disabled = true; btn.textContent = '⏳ Loading…';
       document.getElementById('stats').style.display = 'none';
       wrap.innerHTML = `<div class="state-box"><div class="state-icon">⏳</div><div class="state-msg">Loading orders…</div></div>`;
 
@@ -481,21 +523,16 @@
       } catch {
         wrap.innerHTML = `<div class="state-box error"><div class="state-icon">❌</div><div class="state-msg">Could not load orders.<br/>Check your Google Sheets credentials.</div></div>`;
       }
-
-      btn.disabled = false;
-      btn.textContent = '↻ Refresh';
+      btn.disabled = false; btn.textContent = '↻ Refresh';
     }
 
-    /* ── Render Table ── */
+    /* ══ Render table ══ */
     function renderTable() {
       const wrap = document.getElementById('table-wrap');
-
       if (allOrders.length === 0) {
         wrap.innerHTML = `<div class="state-box"><div class="state-icon">🍧</div><div class="state-msg">No orders yet.<br/>Place your first order from the POS.</div></div>`;
         return;
       }
-
-      // Stats
       const revenue = allOrders.reduce((s, o) => s + Number(o.total || 0), 0);
       document.getElementById('stat-count').textContent   = allOrders.length;
       document.getElementById('stat-revenue').textContent = `₹${revenue}`;
@@ -505,13 +542,7 @@
       wrap.innerHTML = `
         <table>
           <thead>
-            <tr>
-              <th>#Order</th>
-              <th>Date &amp; Time</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Actions</th>
-            </tr>
+            <tr><th>#Order</th><th>Date &amp; Time</th><th>Items</th><th>Total</th><th>Actions</th></tr>
           </thead>
           <tbody id="orders-tbody">
             ${allOrders.map(o => orderRow(o)).join('')}
@@ -533,62 +564,161 @@
         </tr>`;
     }
 
-    /* ════════════════════
-       EDIT
-    ════════════════════ */
+    /* ══════════════════════════════════
+       EDIT MODAL — mini POS
+    ══════════════════════════════════ */
+    function parseOrderString(str) {
+      return str.split(',').map(part => {
+        const m = part.trim().match(/^(.+?)\s+x(\d+)$/i);
+        if (!m) return null;
+        const name = m[1].trim();
+        const qty  = parseInt(m[2]);
+        const mi   = menuData.find(i => i.name.toLowerCase() === name.toLowerCase());
+        return mi
+          ? { id: mi.id, name: mi.name, price: mi.price, qty }
+          : { id: `custom-${Date.now()}`, name, price: 0, qty };
+      }).filter(Boolean);
+    }
+
     function openEditModal(orderId) {
       const order = allOrders.find(o => String(o.orderId) === String(orderId));
       if (!order) return;
+
       editingOrderId = orderId;
+      editItems = parseOrderString(order.items);
 
       document.getElementById('edit-modal-title').textContent = `Edit Order #${orderId}`;
-      document.getElementById('edit-items').value  = order.items;
-      document.getElementById('edit-total').value  = order.total;
       document.getElementById('edit-modal-bg').classList.add('open');
+
+      // Setup category tabs
+      const categories = [...new Set(menuData.map(i => i.category))];
+      editActiveCat = categories[0];
+      renderEditCats(categories);
+      renderEditMenuItems();
+      renderEditOrder();
     }
 
     function closeEditModal() {
       document.getElementById('edit-modal-bg').classList.remove('open');
       editingOrderId = null;
+      editItems = [];
     }
 
-    async function saveEdit() {
-      const items = document.getElementById('edit-items').value.trim();
-      const total = document.getElementById('edit-total').value.trim();
-      if (!items || !total) { showToast('⚠️ Items and total are required'); return; }
+    /* ── Edit: category tabs ── */
+    function renderEditCats(categories) {
+      document.getElementById('edit-cats').innerHTML = categories.map(cat => `
+        <button class="edit-cat-btn ${cat === editActiveCat ? 'active' : ''}"
+          data-cat="${cat}" onclick="setEditCat('${cat}')">
+          ${CAT_META[cat] || '🍽️'} ${cat}
+        </button>`).join('');
+    }
 
+    function setEditCat(cat) {
+      editActiveCat = cat;
+      document.querySelectorAll('.edit-cat-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.cat === cat)
+      );
+      renderEditMenuItems();
+    }
+
+    /* ── Edit: menu items grid ── */
+    function renderEditMenuItems() {
+      document.getElementById('edit-items-grid').innerHTML = menuData
+        .filter(i => i.category === editActiveCat)
+        .map(item => `
+          <div class="edit-item-card" id="eic-${item.id}" onclick="editAddItem(${item.id})">
+            <div class="eic-name">${item.name}</div>
+            <div class="eic-foot">
+              <span class="eic-price">₹${item.price}</span>
+              <span class="eic-plus">+</span>
+            </div>
+          </div>`).join('');
+    }
+
+    /* ── Edit: add item to current order ── */
+    function editAddItem(id) {
+      const mi = menuData.find(i => i.id === id);
+      const ex = editItems.find(i => i.id === id);
+      if (ex) { ex.qty++; }
+      else     { editItems.push({ id: mi.id, name: mi.name, price: mi.price, qty: 1 }); }
+
+      const card = document.getElementById(`eic-${id}`);
+      if (card) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); }
+
+      renderEditOrder();
+    }
+
+    /* ── Edit: qty controls ── */
+    function editUpdateQty(id, delta) {
+      const item = editItems.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) editItems = editItems.filter(i => i.id !== id);
+      renderEditOrder();
+    }
+
+    /* ── Edit: render current order list ── */
+    function renderEditOrder() {
+      const list  = document.getElementById('edit-order-list');
+      const total = editItems.reduce((s, i) => s + i.price * i.qty, 0);
+
+      document.getElementById('edit-total-val').textContent = `₹${total}`;
+      document.getElementById('btn-save').disabled = editItems.length === 0;
+
+      if (editItems.length === 0) {
+        list.innerHTML = `<div class="edit-empty-order">No items — add from menu below</div>`;
+        return;
+      }
+
+      list.innerHTML = editItems.map(item => `
+        <div class="edit-order-item">
+          <span class="eoi-name">${item.name}</span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="editUpdateQty(${JSON.stringify(item.id)}, -1)">&#8722;</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="editUpdateQty(${JSON.stringify(item.id)}, 1)">+</button>
+          </div>
+          <span class="eoi-total">₹${item.price * item.qty}</span>
+        </div>`).join('');
+    }
+
+    /* ── Save edit ── */
+    async function saveEdit() {
+      if (!editItems.length) return;
       const btn = document.getElementById('btn-save');
-      btn.disabled = true;
-      btn.textContent = 'Saving…';
+      btn.disabled = true; btn.textContent = 'Saving…';
+
+      const itemsStr = editItems.map(i => `${i.name} x${i.qty}`).join(', ');
+      const total    = editItems.reduce((s, i) => s + i.price * i.qty, 0);
 
       try {
         const res = await fetch('/api/update-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: editingOrderId, items, total: Number(total) }),
+          body: JSON.stringify({ orderId: editingOrderId, items: itemsStr, total }),
         });
         if (!res.ok) throw new Error();
 
-        // Update local data + re-render row in place
+        // Update local data
         const order = allOrders.find(o => String(o.orderId) === String(editingOrderId));
-        if (order) { order.items = items; order.total = total; }
+        if (order) { order.items = itemsStr; order.total = total; }
 
+        // Update the row in place
         const row = document.getElementById(`row-${editingOrderId}`);
-        if (row) row.outerHTML = orderRow({ orderId: editingOrderId, dateTime: order.dateTime, items, total });
+        if (row) row.outerHTML = orderRow({ orderId: editingOrderId, dateTime: order.dateTime, items: itemsStr, total });
 
         closeEditModal();
         showToast(`✅ Order #${editingOrderId} updated in Google Sheets`);
       } catch {
-        showToast('❌ Failed to update order. Try again.');
+        showToast('❌ Failed to update. Try again.');
+        btn.disabled = false;
       }
-
-      btn.disabled = false;
       btn.textContent = 'Save Changes';
     }
 
-    /* ════════════════════
+    /* ══════════════════════════════════
        DELETE
-    ════════════════════ */
+    ══════════════════════════════════ */
     function openDelModal(orderId) {
       deletingOrderId = orderId;
       document.getElementById('del-modal-title').textContent = `Delete Order #${orderId}?`;
@@ -602,10 +732,7 @@
 
     async function confirmDelete() {
       const btn = document.getElementById('btn-del-confirm');
-      btn.disabled = true;
-      btn.textContent = 'Deleting…';
-
-      // Highlight the row being deleted
+      btn.disabled = true; btn.textContent = 'Deleting…';
       const row = document.getElementById(`row-${deletingOrderId}`);
       if (row) row.classList.add('deleting');
 
@@ -617,11 +744,9 @@
         });
         if (!res.ok) throw new Error();
 
-        // Remove from local array + DOM
         allOrders = allOrders.filter(o => String(o.orderId) !== String(deletingOrderId));
         if (row) row.remove();
 
-        // Re-render if table is now empty, or update stats
         if (allOrders.length === 0) {
           renderTable();
         } else {
@@ -635,12 +760,18 @@
         showToast(`🗑️ Order #${deletingOrderId} deleted from Google Sheets`);
       } catch {
         if (row) row.classList.remove('deleting');
-        showToast('❌ Failed to delete order. Try again.');
+        showToast('❌ Failed to delete. Try again.');
       }
-
-      btn.disabled = false;
-      btn.textContent = 'Delete';
+      btn.disabled = false; btn.textContent = 'Delete';
     }
+
+    /* ── Close on backdrop click ── */
+    document.getElementById('edit-modal-bg').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeEditModal();
+    });
+    document.getElementById('del-modal-bg').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeDelModal();
+    });
 
     /* ── Toast ── */
     let toastTimer;
@@ -652,16 +783,7 @@
       toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
     }
 
-    // Close modals on backdrop click
-    document.getElementById('edit-modal-bg').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeEditModal();
-    });
-    document.getElementById('del-modal-bg').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeDelModal();
-    });
-
     loadOrders();
   </script>
-
 </body>
 </html>
