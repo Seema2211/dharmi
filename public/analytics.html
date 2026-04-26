@@ -318,7 +318,7 @@
     const to   = document.getElementById('toDate').value;
     if (!from && !to) return allOrders;
     return allOrders.filter(o => {
-      const d = parseOrderDate(o.date);
+      const d = parseOrderDate(o.dateTime);
       if (from && d < from) return false;
       if (to   && d > to)   return false;
       return true;
@@ -394,7 +394,7 @@
     // Group by day
     const byDay = {};
     orders.forEach(o => {
-      const key = dayLabel(o.date) || 'Unknown';
+      const key = dayLabel(o.dateTime) || 'Unknown';
       byDay[key] = (byDay[key] || 0) + (Number(o.total) || 0);
     });
 
@@ -456,7 +456,7 @@
 
     const byDay = {};
     orders.forEach(o => {
-      const key = dayLabel(o.date) || 'Unknown';
+      const key = dayLabel(o.dateTime) || 'Unknown';
       byDay[key] = (byDay[key] || 0) + 1;
     });
 
