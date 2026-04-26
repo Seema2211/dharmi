@@ -1,0 +1,125 @@
+/* Demon Slayer theme — overrides for pages with inline styles */
+:root {
+  --pink:    #00d4aa;
+  --coral:   #ff6b35;
+  --bg:      #070715;
+  --surface: rgba(8, 12, 32, 0.80);
+  --border:  rgba(0, 212, 170, 0.22);
+  --text:    #e8f8ff;
+  --text-2:  rgba(232, 248, 255, 0.70);
+  --muted:   rgba(255, 255, 255, 0.35);
+  --red:     #ff5555;
+  --red-bg:  rgba(255, 85, 85, 0.12);
+  --grad:    linear-gradient(135deg, #00d4aa 0%, #0077b6 100%);
+  --shadow:  0 2px 16px rgba(0, 212, 170, 0.15);
+  --r:       12px;
+}
+
+html { background: #070715; }
+body { background: transparent !important; isolation: isolate; }
+
+/* ── Glassmorphism surfaces ── */
+.filter-bar,
+.stat-card,
+.card,
+.card-full {
+  background: rgba(8, 12, 32, 0.80) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: rgba(0, 212, 170, 0.22) !important;
+  box-shadow: 0 4px 24px rgba(0, 212, 170, 0.10), inset 0 0 0 1px rgba(255,255,255,0.04) !important;
+}
+
+/* ── Quick filter buttons ── */
+.q-btn {
+  background: rgba(8, 12, 32, 0.60) !important;
+  border-color: rgba(0, 212, 170, 0.25) !important;
+  color: rgba(232, 248, 255, 0.80) !important;
+}
+.q-btn:hover  { border-color: #00d4aa !important; color: #00d4aa !important; }
+.q-btn.active { background: var(--grad) !important; border-color: transparent !important; color: white !important; }
+
+/* ── Date inputs ── */
+input[type="date"] {
+  background: rgba(8, 12, 32, 0.70) !important;
+  border-color: rgba(0, 212, 170, 0.25) !important;
+  color: #e8f8ff !important;
+  color-scheme: dark;
+}
+input[type="date"]:focus { border-color: #00d4aa !important; }
+
+/* ── Tables ── */
+.tbl-wrap {
+  background: rgba(8, 12, 32, 0.80) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: rgba(0, 212, 170, 0.22) !important;
+}
+th { background: rgba(0, 212, 170, 0.10) !important; color: rgba(232,248,255,0.55) !important; }
+tr:hover td { background: rgba(0, 212, 170, 0.07) !important; }
+tr + tr td   { border-top-color: rgba(0, 212, 170, 0.10) !important; }
+
+/* ── Modals ── */
+.modal-box {
+  background: rgba(8, 12, 40, 0.96) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 170, 0.25) !important;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.6) !important;
+}
+.modal-overlay { background: rgba(0,0,0,0.75) !important; }
+.modal-head    { border-bottom-color: rgba(0, 212, 170, 0.18) !important; }
+.modal-foot    { border-top-color: rgba(0, 212, 170, 0.18) !important; }
+
+/* ── Edit sheet (orders) ── */
+.edit-sheet {
+  background: rgba(6, 9, 28, 0.97) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top-color: rgba(0, 212, 170, 0.20) !important;
+}
+.edit-cats-bar { background: rgba(6, 9, 28, 0.95) !important; border-bottom-color: rgba(0,212,170,0.15) !important; }
+.edit-cat-btn  { background: rgba(8,12,32,0.70) !important; border-color: rgba(0,212,170,0.22) !important; color: rgba(232,248,255,0.75) !important; }
+.edit-cat-btn.active { background: var(--grad) !important; color: white !important; border-color: transparent !important; }
+.edit-items    { background: rgba(6, 9, 28, 0.92) !important; }
+.edit-item-card { background: rgba(12, 18, 45, 0.90) !important; border-color: rgba(0,212,170,0.18) !important; color: #e8f8ff !important; }
+.edit-item-card:hover { border-color: #00d4aa !important; }
+.edit-item-card.selected { background: rgba(0,212,170,0.18) !important; border-color: #00d4aa !important; }
+.edit-row { border-bottom-color: rgba(0,212,170,0.10) !important; }
+.edit-foot { background: rgba(6,9,28,0.98) !important; border-top-color: rgba(0,212,170,0.18) !important; }
+
+/* ── Scrollbar teal ── */
+::-webkit-scrollbar-thumb { background: rgba(0, 212, 170, 0.35) !important; }
+::-webkit-scrollbar-thumb:hover { background: #00d4aa !important; }
+
+/* ── Pagination ── */
+.page-btn {
+  background: rgba(8,12,32,0.70) !important;
+  border-color: rgba(0,212,170,0.22) !important;
+  color: rgba(232,248,255,0.75) !important;
+}
+.page-btn.active { background: var(--grad) !important; color: white !important; border-color: transparent !important; }
+.page-btn:hover:not(.active):not(:disabled) { border-color: #00d4aa !important; color: #00d4aa !important; }
+
+/* ── Stat gradient text ── */
+.stat-val {
+  background: var(--grad) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* ── Result info bar ── */
+.result-info { color: rgba(232,248,255,0.45) !important; }
+
+/* ── Section title muted ── */
+.section-title { color: rgba(255,255,255,0.40) !important; }
+.period-badge  { background: rgba(0,212,170,0.12) !important; border-color: rgba(0,212,170,0.25) !important; color: rgba(232,248,255,0.55) !important; }
+
+/* ── Chart canvas area ── */
+.chart-wrap, .chart-wrap-full { background: transparent !important; }
+
+/* ── Item rank list ── */
+.item-row { border-bottom-color: rgba(0,212,170,0.10) !important; }
+.item-bar-wrap { background: rgba(0,212,170,0.12) !important; }
+.item-qty { color: #00d4aa !important; }
