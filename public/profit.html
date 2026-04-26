@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Profit — Dharmi Ice Cream</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍦</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --pink:    #00d4aa;
+      --coral:   #ff6b35;
+      --bg:      #070715;
+      --surface: rgba(8, 12, 32, 0.80);
+      --border:  rgba(0, 212, 170, 0.22);
+      --text:    #e8f8ff;
+      --text-2:  rgba(232, 248, 255, 0.70);
+      --muted:   rgba(255, 255, 255, 0.35);
+      --green:   #22c55e;
+      --amber:   #f59e0b;
+      --red:     #ff5555;
+      --grad:    linear-gradient(135deg, #00d4aa 0%, #0077b6 100%);
+      --grad-p:  linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      --shadow:  0 2px 16px rgba(0, 212, 170, 0.15);
+      --r:       12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: transparent; color: var(--text);
+      min-height: 100dvh; -webkit-font-smoothing: antialiased;
+      isolation: isolate;
+    }
+    html { background: #070715; }
+
+    /* ── Header ── */
+    .header {
+      background: var(--grad); color: white;
+      padding: 13px 16px;
+      padding-top: calc(13px + env(safe-area-inset-top));
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,212,170,0.25);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.22); border: none; color: white;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      text-decoration: none; flex-shrink: 0; transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.35); }
+    .header-info { flex: 1; }
+    .header-title { font-size: 1rem; font-weight: 800; }
+    .header-sub   { font-size: 0.68rem; opacity: 0.85; }
+    .refresh-btn {
+      background: rgba(255,255,255,0.22); border: none; color: white;
+      padding: 7px 14px; border-radius: 999px;
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+    }
+    .refresh-btn:hover    { background: rgba(255,255,255,0.35); }
+    .refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── Content ── */
+    .content { max-width: 1000px; margin: 0 auto; padding: 16px 14px 60px; }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      background: rgba(8,12,32,0.80); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid var(--border); border-radius: var(--r);
+      padding: 14px 16px; margin-bottom: 14px; box-shadow: var(--shadow);
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    }
+    .filter-label {
+      font-size: 0.75rem; font-weight: 700; color: var(--muted);
+      letter-spacing: 0.4px; text-transform: uppercase; flex-shrink: 0;
+    }
+    .quick-btns { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+    .q-btn {
+      padding: 5px 12px; border-radius: 999px;
+      border: 1.5px solid rgba(0,212,170,0.25);
+      background: rgba(8,12,32,0.60); color: rgba(232,248,255,0.80);
+      font-family: inherit; font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .q-btn:hover  { border-color: var(--pink); color: var(--pink); }
+    .q-btn.active { background: var(--grad); border-color: transparent; color: white; }
+    .date-inputs  { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .date-inputs input[type="date"] {
+      padding: 5px 10px; border: 1.5px solid rgba(0,212,170,0.25);
+      border-radius: 8px; font-family: inherit; font-size: 0.78rem;
+      color: #e8f8ff; background: rgba(8,12,32,0.70);
+      cursor: pointer; outline: none; color-scheme: dark;
+    }
+    .date-inputs input[type="date"]:focus { border-color: var(--pink); }
+    .date-sep { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+
+    /* ── Stats ── */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-bottom: 14px;
+    }
+    @media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: rgba(8,12,32,0.80); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid var(--border); border-radius: var(--r);
+      padding: 14px 12px; text-align: center; box-shadow: var(--shadow);
+    }
+    .stat-val {
+      font-size: 1.35rem; font-weight: 800; line-height: 1.2;
+    }
+    .stat-val.teal   { background: var(--grad);   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-val.green  { background: var(--grad-p);  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-val.amber  { color: var(--amber); }
+    .stat-val.profit { color: var(--green); }
+    .stat-label { font-size: 0.66rem; font-weight: 600; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(8,12,32,0.80); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid var(--border); border-radius: var(--r);
+      padding: 16px; box-shadow: var(--shadow);
+    }
+    .card-full { margin-bottom: 14px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ── Section title ── */
+    .section-title {
+      font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.40);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+    }
+    .section-title span { font-size: 1rem; }
+    .period-badge {
+      font-size: 0.68rem; font-weight: 600;
+      color: rgba(232,248,255,0.55); margin-left: auto;
+      padding: 2px 8px; background: rgba(0,212,170,0.12);
+      border-radius: 999px; border: 1px solid rgba(0,212,170,0.25);
+    }
+
+    /* ── Chart ── */
+    .chart-wrap { position: relative; height: 240px; }
+    .chart-wrap-full { position: relative; height: 260px; }
+
+    /* ── Item profit table ── */
+    .profit-table { width: 100%; border-collapse: collapse; }
+    .profit-table th {
+      text-align: left; font-size: 0.68rem; font-weight: 700;
+      color: rgba(232,248,255,0.45); text-transform: uppercase;
+      letter-spacing: 0.4px; padding: 6px 8px;
+      border-bottom: 1px solid rgba(0,212,170,0.15);
+    }
+    .profit-table td {
+      padding: 8px 8px; font-size: 0.80rem;
+      border-bottom: 1px solid rgba(0,212,170,0.08);
+      vertical-align: middle;
+    }
+    .profit-table tr:last-child td { border-bottom: none; }
+    .profit-table tr:hover td { background: rgba(0,212,170,0.05); }
+    .item-name-cell { font-weight: 600; }
+    .cat-badge {
+      display: inline-block; font-size: 0.62rem; font-weight: 700;
+      padding: 1px 6px; border-radius: 4px; margin-left: 5px;
+      opacity: 0.65;
+    }
+    .cat-kulfi    { background: rgba(0,212,170,0.18); color: #00d4aa; }
+    .cat-icecream { background: rgba(100,150,255,0.18); color: #7aa2ff; }
+    .cat-lassi    { background: rgba(255,165,0,0.18); color: #ffb347; }
+    .margin-bar-wrap { width: 70px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 99px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+    .margin-bar { height: 100%; border-radius: 99px; }
+    .margin-high   { background: #22c55e; }
+    .margin-medium { background: #f59e0b; }
+    .margin-low    { background: #ff5555; }
+    .profit-val  { font-weight: 700; color: #22c55e; }
+    .revenue-val { color: rgba(232,248,255,0.65); }
+    .qty-val     { color: rgba(232,248,255,0.50); font-size: 0.76rem; }
+
+    /* ── Empty / Loading ── */
+    .loading {
+      text-align: center; padding: 40px 20px;
+      color: var(--muted); font-size: 0.85rem;
+    }
+    .loading-spinner {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 3px solid rgba(0,212,170,0.2); border-top-color: #00d4aa;
+      animation: spin 0.7s linear infinite; margin: 0 auto 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty { text-align: center; padding: 30px; color: var(--muted); font-size: 0.85rem; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,212,170,0.35); border-radius: 4px; }
+  </style>
+  <link rel="stylesheet" href="/ds-theme.css" />
+</head>
+<body>
+
+<header class="header">
+  <a class="back-btn" href="/">&#8592;</a>
+  <div class="header-info">
+    <div class="header-title">💰 Profit Analysis</div>
+    <div class="header-sub">Dharmi Ice Cream &amp; Kulfi</div>
+  </div>
+  <button class="refresh-btn" id="refreshBtn" onclick="loadData()">↻ Refresh</button>
+</header>
+
+<div class="content">
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Period</span>
+    <div class="quick-btns">
+      <button class="q-btn active" onclick="setQuick('today')">Today</button>
+      <button class="q-btn" onclick="setQuick('yesterday')">Yesterday</button>
+      <button class="q-btn" onclick="setQuick('week')">This Week</button>
+      <button class="q-btn" onclick="setQuick('month')">This Month</button>
+      <button class="q-btn" onclick="setQuick('all')">All Time</button>
+    </div>
+    <div class="date-inputs">
+      <input type="date" id="fromDate" onchange="onDateChange()" />
+      <span class="date-sep">–</span>
+      <input type="date" id="toDate" onchange="onDateChange()" />
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-val teal"  id="s-revenue">—</div>
+      <div class="stat-label">Revenue</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val amber" id="s-cost">—</div>
+      <div class="stat-label">Purchase Cost</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val profit" id="s-profit">—</div>
+      <div class="stat-label">Net Profit</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val green" id="s-margin">—</div>
+      <div class="stat-label">Profit Margin</div>
+    </div>
+  </div>
+
+  <!-- Day-wise Profit chart -->
+  <div class="card card-full">
+    <div class="section-title">
+      <span>📅</span> Day-wise Profit
+      <span class="period-badge" id="periodBadge"></span>
+    </div>
+    <div id="profitChartWrap" class="chart-wrap-full">
+      <div class="loading"><div class="loading-spinner"></div>Loading…</div>
+    </div>
+  </div>
+
+  <!-- Revenue vs Cost chart + Item breakdown -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title"><span>📊</span> Revenue vs Cost per Day</div>
+      <div id="revCostChartWrap" class="chart-wrap">
+        <div class="loading"><div class="loading-spinner"></div>Loading…</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title"><span>🏷️</span> Profit by Category</div>
+      <div id="catChartWrap" class="chart-wrap">
+        <div class="loading"><div class="loading-spinner"></div>Loading…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Per-item profit breakdown -->
+  <div class="card">
+    <div class="section-title"><span>🧾</span> Item-wise Profit Breakdown</div>
+    <div style="overflow-x:auto">
+      <table class="profit-table" id="itemTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Sell Price</th>
+            <th>Buy Price</th>
+            <th>Margin</th>
+            <th>Profit</th>
+          </tr>
+        </thead>
+        <tbody id="itemTableBody">
+          <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let allOrders = [];
+  let menuData  = [];
+  let profitChart = null, revCostChart = null, catChart = null;
+
+  // ── Date helpers ──────────────────────────────────────────────
+  function fmtDate(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+  function today()      { return fmtDate(new Date()); }
+  function yesterday()  { const d=new Date(); d.setDate(d.getDate()-1); return fmtDate(d); }
+  function weekStart()  { const d=new Date(); d.setDate(d.getDate()-d.getDay()); return fmtDate(d); }
+  function monthStart() { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; }
+
+  function parseOrderDate(str) {
+    if (!str) return '';
+    const m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+  }
+  function dayLabel(str) {
+    if (!str) return '';
+    const m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? `${m[1]}/${m[2]}` : str;
+  }
+
+  // ── Quick date buttons ────────────────────────────────────────
+  function setQuick(type) {
+    document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+    const btns = document.querySelectorAll('.q-btn');
+    const map = { today:0, yesterday:1, week:2, month:3, all:4 };
+    btns[map[type]]?.classList.add('active');
+    const from = document.getElementById('fromDate');
+    const to   = document.getElementById('toDate');
+    const t = today(), y = yesterday();
+    if      (type === 'today')     { from.value = t;           to.value = t; }
+    else if (type === 'yesterday') { from.value = y;           to.value = y; }
+    else if (type === 'week')      { from.value = weekStart();  to.value = t; }
+    else if (type === 'month')     { from.value = monthStart(); to.value = t; }
+    else                           { from.value = '';           to.value = ''; }
+    render();
+  }
+
+  function onDateChange() {
+    document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+    render();
+  }
+
+  // ── Load data ─────────────────────────────────────────────────
+  async function loadData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.disabled = true; btn.textContent = '↻ Loading…';
+    try {
+      const [ordersRes, menuRes] = await Promise.all([
+        fetch('/api/orders'),
+        fetch('/menu.json'),
+      ]);
+      allOrders = await ordersRes.json();
+      menuData  = await menuRes.json();
+      render();
+    } catch(e) {
+      document.getElementById('itemTableBody').innerHTML =
+        '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Failed to load data.</td></tr>';
+    } finally {
+      btn.disabled = false; btn.textContent = '↻ Refresh';
+    }
+  }
+
+  // ── Build lookup: name (lowercase) → { sellPrice, purchasePrice, category }
+  // For duplicate names across categories, average the purchase price
+  function buildPriceLookup() {
+    const map = {};
+    menuData.forEach(item => {
+      const key = item.name.toLowerCase();
+      if (map[key]) {
+        map[key].purchasePrice = (map[key].purchasePrice + item.purchasePrice) / 2;
+        map[key].sellPrice     = (map[key].sellPrice + item.price) / 2;
+      } else {
+        map[key] = {
+          sellPrice:     item.price,
+          purchasePrice: item.purchasePrice,
+          category:      item.category,
+        };
+      }
+    });
+    return map;
+  }
+
+  // ── Parse "Name x2, Name x1" ─────────────────────────────────
+  function parseItems(str) {
+    if (!str) return [];
+    return str.split(',').map(s => {
+      const m = s.trim().match(/^(.+?)\s+x(\d+)$/i);
+      return m ? { name: m[1].trim(), qty: parseInt(m[2]) } : null;
+    }).filter(Boolean);
+  }
+
+  // ── Filter orders by date ─────────────────────────────────────
+  function getFiltered() {
+    const from = document.getElementById('fromDate').value;
+    const to   = document.getElementById('toDate').value;
+    if (!from && !to) return allOrders;
+    return allOrders.filter(o => {
+      const d = parseOrderDate(o.dateTime);
+      if (from && d < from) return false;
+      if (to   && d > to)   return false;
+      return true;
+    });
+  }
+
+  // ── Main render ───────────────────────────────────────────────
+  function render() {
+    const filtered = getFiltered();
+    const lookup   = buildPriceLookup();
+
+    // Accumulate totals
+    let totalRevenue = 0, totalCost = 0;
+    const byDay = {};  // date label → { revenue, cost, profit }
+    const byItem = {}; // item name  → { qty, revenue, cost, category, sellPrice, purchasePrice }
+    const byCat  = {}; // category   → { revenue, cost }
+
+    filtered.forEach(order => {
+      const day = dayLabel(order.dateTime) || 'Unknown';
+      if (!byDay[day]) byDay[day] = { revenue: 0, cost: 0 };
+
+      parseItems(order.items).forEach(({ name, qty }) => {
+        const info = lookup[name.toLowerCase()];
+        const sell = info ? info.sellPrice     : (Number(order.total) / Math.max(parseItems(order.items).reduce((s,i)=>s+i.qty,0),1));
+        const buy  = info ? info.purchasePrice : sell * 0.5;
+        const cat  = info ? info.category      : 'Other';
+
+        const rev  = sell * qty;
+        const cost = buy  * qty;
+
+        totalRevenue += rev;
+        totalCost    += cost;
+        byDay[day].revenue += rev;
+        byDay[day].cost    += cost;
+
+        const key = name;
+        if (!byItem[key]) byItem[key] = { qty: 0, revenue: 0, cost: 0, category: cat, sellPrice: sell, purchasePrice: buy };
+        byItem[key].qty     += qty;
+        byItem[key].revenue += rev;
+        byItem[key].cost    += cost;
+
+        if (!byCat[cat]) byCat[cat] = { revenue: 0, cost: 0 };
+        byCat[cat].revenue += rev;
+        byCat[cat].cost    += cost;
+      });
+    });
+
+    const totalProfit = totalRevenue - totalCost;
+    const margin = totalRevenue > 0 ? (totalProfit / totalRevenue * 100) : 0;
+
+    // Stats
+    document.getElementById('s-revenue').textContent = '₹' + Math.round(totalRevenue).toLocaleString('en-IN');
+    document.getElementById('s-cost').textContent    = '₹' + Math.round(totalCost).toLocaleString('en-IN');
+    document.getElementById('s-profit').textContent  = '₹' + Math.round(totalProfit).toLocaleString('en-IN');
+    document.getElementById('s-margin').textContent  = margin.toFixed(1) + '%';
+
+    // Period badge
+    const from = document.getElementById('fromDate').value;
+    const to   = document.getElementById('toDate').value;
+    document.getElementById('periodBadge').textContent =
+      (!from && !to) ? 'All Time' : from === to ? from : `${from} – ${to}`;
+
+    renderProfitChart(byDay);
+    renderRevCostChart(byDay);
+    renderCatChart(byCat);
+    renderItemTable(byItem);
+  }
+
+  // ── Day-wise profit bar chart ─────────────────────────────────
+  function renderProfitChart(byDay) {
+    const wrap = document.getElementById('profitChartWrap');
+    const labels = Object.keys(byDay);
+    const profits = labels.map(d => Math.round(byDay[d].revenue - byDay[d].cost));
+
+    if (!labels.length) {
+      wrap.innerHTML = '<div class="empty">No data for this period.</div>';
+      if (profitChart) { profitChart.destroy(); profitChart = null; }
+      return;
+    }
+    if (!wrap.querySelector('canvas')) wrap.innerHTML = '<canvas id="profitCanvas"></canvas>';
+    const ctx = document.getElementById('profitCanvas').getContext('2d');
+    if (profitChart) profitChart.destroy();
+
+    profitChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Profit (₹)',
+          data: profits,
+          backgroundColor: profits.map(v => v >= 0 ? 'rgba(34,197,94,0.65)' : 'rgba(255,85,85,0.65)'),
+          borderRadius: 6, borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: c => ' ₹' + c.parsed.y.toLocaleString('en-IN') } }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: 'Poppins', size: 11 } } },
+          y: { grid: { color: 'rgba(0,212,170,0.10)' }, ticks: { font: { family: 'Poppins', size: 11 }, callback: v => '₹'+v.toLocaleString('en-IN') } }
+        }
+      }
+    });
+  }
+
+  // ── Revenue vs Cost stacked chart ─────────────────────────────
+  function renderRevCostChart(byDay) {
+    const wrap = document.getElementById('revCostChartWrap');
+    const labels = Object.keys(byDay);
+    if (!labels.length) {
+      wrap.innerHTML = '<div class="empty">No data for this period.</div>';
+      if (revCostChart) { revCostChart.destroy(); revCostChart = null; }
+      return;
+    }
+    if (!wrap.querySelector('canvas')) wrap.innerHTML = '<canvas id="revCostCanvas"></canvas>';
+    const ctx = document.getElementById('revCostCanvas').getContext('2d');
+    if (revCostChart) revCostChart.destroy();
+
+    revCostChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Cost',
+            data: labels.map(d => Math.round(byDay[d].cost)),
+            backgroundColor: 'rgba(245,158,11,0.60)',
+            borderRadius: 4, borderSkipped: false, stack: 'stack',
+          },
+          {
+            label: 'Profit',
+            data: labels.map(d => Math.round(byDay[d].revenue - byDay[d].cost)),
+            backgroundColor: 'rgba(34,197,94,0.65)',
+            borderRadius: 4, borderSkipped: false, stack: 'stack',
+          },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: 'rgba(232,248,255,0.65)', font: { family: 'Poppins', size: 11 }, boxWidth: 12 } },
+          tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ₹${c.parsed.y.toLocaleString('en-IN')}` } }
+        },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { font: { family: 'Poppins', size: 10 }, color: 'rgba(232,248,255,0.55)' } },
+          y: { stacked: true, grid: { color: 'rgba(0,212,170,0.10)' }, ticks: { font: { family: 'Poppins', size: 10 }, color: 'rgba(232,248,255,0.55)', callback: v => '₹'+v } }
+        }
+      }
+    });
+  }
+
+  // ── Category profit doughnut ──────────────────────────────────
+  function renderCatChart(byCat) {
+    const wrap = document.getElementById('catChartWrap');
+    const cats  = Object.keys(byCat);
+    const profits = cats.map(c => Math.round(byCat[c].revenue - byCat[c].cost));
+    if (!cats.length) {
+      wrap.innerHTML = '<div class="empty">No data for this period.</div>';
+      if (catChart) { catChart.destroy(); catChart = null; }
+      return;
+    }
+    if (!wrap.querySelector('canvas')) wrap.innerHTML = '<canvas id="catCanvas"></canvas>';
+    const ctx = document.getElementById('catCanvas').getContext('2d');
+    if (catChart) catChart.destroy();
+
+    const colors = { Kulfi: '#00d4aa', 'Ice Cream': '#7aa2ff', Lassi: '#ffb347', Other: '#b48cf7' };
+    catChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: cats,
+        datasets: [{
+          data: profits,
+          backgroundColor: cats.map(c => colors[c] || '#888'),
+          borderColor: 'rgba(8,12,32,0.6)',
+          borderWidth: 3,
+          hoverOffset: 8,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+          legend: { position: 'bottom', labels: { color: 'rgba(232,248,255,0.70)', font: { family: 'Poppins', size: 11 }, boxWidth: 12, padding: 14 } },
+          tooltip: { callbacks: { label: c => ` ₹${c.parsed.toLocaleString('en-IN')} profit` } }
+        }
+      }
+    });
+  }
+
+  // ── Item profit table ─────────────────────────────────────────
+  function renderItemTable(byItem) {
+    const tbody = document.getElementById('itemTableBody');
+    const rows = Object.entries(byItem)
+      .map(([name, d]) => ({ name, ...d, profit: d.revenue - d.cost, margin: d.revenue > 0 ? (d.revenue - d.cost) / d.revenue * 100 : 0 }))
+      .sort((a, b) => b.profit - a.profit);
+
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">No data for this period.</td></tr>';
+      return;
+    }
+
+    const catClass = c => c === 'Kulfi' ? 'cat-kulfi' : c === 'Ice Cream' ? 'cat-icecream' : c === 'Lassi' ? 'cat-lassi' : '';
+    const marginClass = m => m >= 45 ? 'margin-high' : m >= 30 ? 'margin-medium' : 'margin-low';
+
+    tbody.innerHTML = rows.map((r, i) => `
+      <tr>
+        <td style="color:var(--muted);font-size:0.74rem">${i + 1}</td>
+        <td class="item-name-cell">
+          ${r.name}
+          <span class="cat-badge ${catClass(r.category)}">${r.category}</span>
+        </td>
+        <td class="qty-val">${r.qty}</td>
+        <td class="revenue-val">₹${r.sellPrice.toFixed(0)}</td>
+        <td style="color:var(--amber)">₹${r.purchasePrice.toFixed(2)}</td>
+        <td>
+          <span class="margin-bar-wrap"><span class="margin-bar ${marginClass(r.margin)}" style="width:${Math.min(r.margin,100).toFixed(0)}%"></span></span>
+          <span style="font-size:0.75rem;color:${r.margin>=45?'#22c55e':r.margin>=30?'#f59e0b':'#ff5555'}">${r.margin.toFixed(1)}%</span>
+        </td>
+        <td class="profit-val">₹${Math.round(r.profit).toLocaleString('en-IN')}</td>
+      </tr>`).join('');
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  function initDates() {
+    const t = today();
+    document.getElementById('fromDate').value = t;
+    document.getElementById('toDate').value   = t;
+  }
+
+  initDates();
+  loadData();
+</script>
+<script src="/ds-bg.js"></script>
+
+</body>
+</html>
