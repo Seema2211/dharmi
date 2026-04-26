@@ -84,51 +84,54 @@
     });
   }
 
-  // ── Character: draw image with glow (if loaded) ───────────────
+  // ── Character: draw image with glow (desktop/tablet only) ───────
   function drawCharImage(img, side) {
     if (!img || !img.complete || img.naturalWidth === 0) return false;
-    const maxH = Math.min(H * 0.72, 520);
+    if (W < 700) return true; // hide on mobile — particles are enough
+
+    // Cap height to 65% of screen, never taller than 480px,
+    // and never wider than 28% of viewport (keeps both chars off-centre)
+    const maxH = Math.min(H * 0.65, 480);
     const scale = maxH / img.naturalHeight;
-    const w = img.naturalWidth * scale;
-    const x = side === 'left' ? -w * 0.08 : W - w * 0.92;
-    const y = H - maxH;
+    const rawW  = img.naturalWidth * scale;
+    const w     = Math.min(rawW, W * 0.28);
+    const h     = w / (img.naturalWidth / img.naturalHeight); // keep aspect ratio
+
+    // Push images well into the edges so they never overlap content
+    const x = side === 'left' ? -w * 0.38 : W - w * 0.62;
+    const y = H - h;
     const glowColor = side === 'left' ? '#00d4aa' : '#ff6b35';
 
     ctx.save();
-    // Outer atmospheric glow
+
+    // Atmospheric aura
     const aura = ctx.createRadialGradient(
-      x + w * 0.5, y + maxH * 0.6, 0,
-      x + w * 0.5, y + maxH * 0.6, w * 0.8
+      x + w * 0.5, y + h * 0.6, 0,
+      x + w * 0.5, y + h * 0.6, w * 0.75
     );
-    aura.addColorStop(0, side === 'left' ? 'rgba(0,212,170,0.10)' : 'rgba(255,107,53,0.08)');
+    aura.addColorStop(0, side === 'left' ? 'rgba(0,212,170,0.09)' : 'rgba(255,107,53,0.07)');
     aura.addColorStop(1, 'transparent');
     ctx.fillStyle = aura;
     ctx.beginPath();
-    ctx.ellipse(x + w * 0.5, y + maxH * 0.65, w * 0.8, maxH * 0.65, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + w * 0.5, y + h * 0.65, w * 0.75, h * 0.65, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // Ground glow
-    const grdGlow = ctx.createRadialGradient(x + w * 0.5, H, 0, x + w * 0.5, H, w * 0.7);
-    grdGlow.addColorStop(0, side === 'left' ? 'rgba(0,212,170,0.14)' : 'rgba(255,107,53,0.12)');
-    grdGlow.addColorStop(1, 'transparent');
-    ctx.fillStyle = grdGlow;
+    const grdG = ctx.createRadialGradient(x + w * 0.5, H, 0, x + w * 0.5, H, w * 0.6);
+    grdG.addColorStop(0, side === 'left' ? 'rgba(0,212,170,0.12)' : 'rgba(255,107,53,0.10)');
+    grdG.addColorStop(1, 'transparent');
+    ctx.fillStyle = grdG;
     ctx.beginPath();
-    ctx.ellipse(x + w * 0.5, H, w * 0.7, H * 0.06, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + w * 0.5, H, w * 0.6, H * 0.055, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Draw image with glow passes
+    // Soft glow passes
     ctx.shadowColor = glowColor;
-    ctx.shadowBlur = 35;
-    ctx.globalAlpha = 0.12;
-    ctx.drawImage(img, x, y, w, maxH);
-    ctx.shadowBlur = 20;
-    ctx.globalAlpha = 0.18;
-    ctx.drawImage(img, x, y, w, maxH);
+    ctx.shadowBlur  = 40; ctx.globalAlpha = 0.10; ctx.drawImage(img, x, y, w, h);
+    ctx.shadowBlur  = 22; ctx.globalAlpha = 0.14; ctx.drawImage(img, x, y, w, h);
 
-    // Final image
-    ctx.shadowBlur = 10;
-    ctx.globalAlpha = 0.50;
-    ctx.drawImage(img, x, y, w, maxH);
+    // Main draw — 0.38 opacity keeps UI readable
+    ctx.shadowBlur  = 8;  ctx.globalAlpha = 0.38; ctx.drawImage(img, x, y, w, h);
     ctx.restore();
     return true;
   }
@@ -298,15 +301,13 @@
     drawMoon();
     drawStars();
 
-    // Characters — image if loaded, otherwise silhouette
-    const mobile = W < 700;
-    const S = mobile ? H * 0.40 : H * 0.52;
-
-    if (!drawCharImage(charImgs.left, 'left')) {
-      if (!mobile) drawSilhouette(S * 0.55, H, S, 'rgba(0,212,170,0.13)', false);
-    }
-    if (!drawCharImage(charImgs.right, 'right')) {
-      if (!mobile) drawSilhouette(W - S * 0.55, H, S * 0.92, 'rgba(255,107,53,0.11)', true);
+    // Characters — desktop/tablet only (hidden on mobile < 700px)
+    if (W >= 700) {
+      const S = H * 0.52;
+      if (!drawCharImage(charImgs.left,  'left'))
+        drawSilhouette(S * 0.50, H, S, 'rgba(0,212,170,0.13)', false);
+      if (!drawCharImage(charImgs.right, 'right'))
+        drawSilhouette(W - S * 0.50, H, S * 0.90, 'rgba(255,107,53,0.11)', true);
     }
 
     drawStreaks();
