@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Analytics — Dharmi Ice Cream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --pink:    #E91E8C;
+      --coral:   #FF6B6B;
+      --bg:      #FFF0F7;
+      --surface: #FFFFFF;
+      --border:  #F2D5E8;
+      --text:    #1A0A12;
+      --text-2:  #6B4F5E;
+      --muted:   #C0A0B4;
+      --grad:    linear-gradient(135deg, #E91E8C, #FF6B6B);
+      --shadow:  0 2px 14px rgba(233,30,140,0.10);
+      --r:       12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100dvh; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--grad); color: white;
+      padding: 13px 16px;
+      padding-top: calc(13px + env(safe-area-inset-top));
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 4px 20px rgba(233,30,140,0.30);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.22); border: none; color: white;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      text-decoration: none; flex-shrink: 0; transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.35); }
+    .header-info  { flex: 1; }
+    .header-title { font-size: 1rem; font-weight: 800; }
+    .header-sub   { font-size: 0.68rem; opacity: 0.85; }
+    .refresh-btn {
+      background: rgba(255,255,255,0.22); border: none; color: white;
+      padding: 7px 14px; border-radius: 999px;
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+    }
+    .refresh-btn:hover    { background: rgba(255,255,255,0.35); }
+    .refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── Content ── */
+    .content { max-width: 1000px; margin: 0 auto; padding: 16px 14px 60px; }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r); padding: 14px 16px;
+      margin-bottom: 14px; box-shadow: var(--shadow);
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    }
+    .filter-label {
+      font-size: 0.75rem; font-weight: 700; color: var(--muted);
+      letter-spacing: 0.4px; text-transform: uppercase; flex-shrink: 0;
+    }
+    .quick-btns { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+    .q-btn {
+      padding: 5px 12px; border-radius: 999px; border: 1.5px solid var(--border);
+      background: transparent; color: var(--text-2); font-family: inherit;
+      font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    }
+    .q-btn:hover  { border-color: var(--pink); color: var(--pink); }
+    .q-btn.active { background: var(--grad); border-color: transparent; color: white; }
+    .date-inputs  { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .date-inputs input[type="date"] {
+      padding: 5px 10px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 0.78rem; color: var(--text);
+      background: var(--bg); cursor: pointer; outline: none;
+    }
+    .date-inputs input[type="date"]:focus { border-color: var(--pink); }
+    .date-sep { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+
+    /* ── Stats ── */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-bottom: 16px;
+    }
+    @media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r); padding: 14px 12px; text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat-val {
+      font-size: 1.35rem; font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1.2;
+    }
+    .stat-label { font-size: 0.66rem; font-weight: 600; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    /* ── Section title ── */
+    .section-title {
+      font-size: 0.8rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .section-title span { font-size: 1rem; }
+
+    /* ── Two-column grid ── */
+    .grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;
+    }
+    @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r); padding: 16px; box-shadow: var(--shadow);
+    }
+
+    /* ── Item Ranking ── */
+    .item-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .item-row:last-child { border-bottom: none; }
+    .rank {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 800; flex-shrink: 0;
+    }
+    .rank-1 { background: linear-gradient(135deg,#FFD700,#FFA500); color: white; }
+    .rank-2 { background: linear-gradient(135deg,#C0C0C0,#A0A0A0); color: white; }
+    .rank-3 { background: linear-gradient(135deg,#CD7F32,#A05A2C); color: white; }
+    .rank-n { background: var(--bg); color: var(--muted); }
+    .item-name { flex: 1; font-size: 0.82rem; font-weight: 600; min-width: 0; }
+    .item-bar-wrap { width: 90px; height: 6px; background: var(--bg); border-radius: 99px; flex-shrink: 0; overflow: hidden; }
+    .item-bar { height: 100%; border-radius: 99px; background: var(--grad); transition: width 0.6s ease; }
+    .item-qty { font-size: 0.78rem; font-weight: 700; color: var(--pink); flex-shrink: 0; width: 40px; text-align: right; }
+
+    /* ── Revenue Chart ── */
+    .chart-wrap { position: relative; height: 240px; }
+
+    /* ── Full-width revenue chart ── */
+    .card-full { margin-bottom: 14px; }
+    .chart-wrap-full { position: relative; height: 260px; }
+
+    /* ── Loading / Empty ── */
+    .loading {
+      text-align: center; padding: 40px 20px;
+      color: var(--muted); font-size: 0.85rem;
+    }
+    .loading-spinner {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 3px solid var(--border); border-top-color: var(--pink);
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty { text-align: center; padding: 30px; color: var(--muted); font-size: 0.85rem; }
+
+    /* ── Period badge ── */
+    .period-badge {
+      font-size: 0.68rem; font-weight: 600; color: var(--muted);
+      margin-left: auto; padding: 2px 8px; background: var(--bg);
+      border-radius: 999px; border: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <a class="back-btn" href="/index.html">&#8592;</a>
+  <div class="header-info">
+    <div class="header-title">📊 Analytics</div>
+    <div class="header-sub">Dharmi Ice Cream &amp; Kulfi</div>
+  </div>
+  <button class="refresh-btn" id="refreshBtn" onclick="loadData()">↻ Refresh</button>
+</header>
+
+<div class="content">
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Period</span>
+    <div class="quick-btns">
+      <button class="q-btn" onclick="setQuick('today')">Today</button>
+      <button class="q-btn" onclick="setQuick('yesterday')">Yesterday</button>
+      <button class="q-btn" onclick="setQuick('week')">This Week</button>
+      <button class="q-btn" onclick="setQuick('month')">This Month</button>
+      <button class="q-btn active" id="qAll" onclick="setQuick('all')">All Time</button>
+    </div>
+    <div class="date-inputs">
+      <input type="date" id="fromDate" onchange="onDateChange()" />
+      <span class="date-sep">–</span>
+      <input type="date" id="toDate" onchange="onDateChange()" />
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats">
+    <div class="stat-card"><div class="stat-val" id="s-orders">—</div><div class="stat-label">Orders</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-revenue">—</div><div class="stat-label">Revenue</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-items">—</div><div class="stat-label">Items Sold</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-avg">—</div><div class="stat-label">Avg / Order</div></div>
+  </div>
+
+  <!-- Day-wise Revenue (full width) -->
+  <div class="card card-full">
+    <div class="section-title">
+      <span>📅</span> Day-wise Revenue
+      <span class="period-badge" id="revPeriod"></span>
+    </div>
+    <div id="revenueChartWrap" class="chart-wrap-full">
+      <div class="loading"><div class="loading-spinner"></div>Loading…</div>
+    </div>
+  </div>
+
+  <!-- Items + Orders per day -->
+  <div class="grid-2">
+    <!-- Top Items -->
+    <div class="card">
+      <div class="section-title"><span>🏆</span> Top Items by Quantity</div>
+      <div id="itemsList"><div class="loading"><div class="loading-spinner"></div>Loading…</div></div>
+    </div>
+
+    <!-- Orders per day chart -->
+    <div class="card">
+      <div class="section-title"><span>🗓️</span> Orders per Day</div>
+      <div id="ordersChartWrap" class="chart-wrap">
+        <div class="loading"><div class="loading-spinner"></div>Loading…</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let allOrders = [];
+  let revenueChart = null;
+  let ordersChart  = null;
+
+  // ── Date helpers ──────────────────────────────────────────────
+  function today()     { return fmtDate(new Date()); }
+  function yesterday() { const d = new Date(); d.setDate(d.getDate()-1); return fmtDate(d); }
+  function weekStart() { const d = new Date(); d.setDate(d.getDate() - d.getDay()); return fmtDate(d); }
+  function monthStart(){ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; }
+  function fmtDate(d)  { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+  // "DD/MM/YYYY, HH:MM" → "YYYY-MM-DD"
+  function parseOrderDate(str) {
+    if (!str) return '';
+    const m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+  }
+
+  // "DD/MM/YYYY, HH:MM" → "DD/MM/YYYY" display label
+  function dayLabel(str) {
+    if (!str) return '';
+    const m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? `${m[1]}/${m[2]}` : str;
+  }
+
+  // ── Quick date buttons ────────────────────────────────────────
+  function setQuick(type) {
+    document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+    const el = {
+      today: 0, yesterday: 1, week: 2, month: 3, all: 4
+    };
+    document.querySelectorAll('.q-btn')[el[type]]?.classList.add('active');
+
+    const from = document.getElementById('fromDate');
+    const to   = document.getElementById('toDate');
+    const t = today(), y = yesterday();
+
+    if (type === 'today')     { from.value = t;          to.value = t; }
+    else if (type === 'yesterday') { from.value = y;     to.value = y; }
+    else if (type === 'week') { from.value = weekStart(); to.value = t; }
+    else if (type === 'month'){ from.value = monthStart(); to.value = t; }
+    else                      { from.value = '';          to.value = ''; }
+
+    render();
+  }
+
+  function onDateChange() {
+    document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+    render();
+  }
+
+  // ── Load orders from API ──────────────────────────────────────
+  async function loadData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.disabled = true; btn.textContent = '↻ Loading…';
+
+    try {
+      const r = await fetch('/api/orders');
+      const data = await r.json();
+      allOrders = Array.isArray(data) ? data : [];
+      render();
+    } catch(e) {
+      document.getElementById('itemsList').innerHTML = '<div class="empty">Failed to load orders.</div>';
+    } finally {
+      btn.disabled = false; btn.textContent = '↻ Refresh';
+    }
+  }
+
+  // ── Filter orders by date range ───────────────────────────────
+  function getFiltered() {
+    const from = document.getElementById('fromDate').value;
+    const to   = document.getElementById('toDate').value;
+    if (!from && !to) return allOrders;
+    return allOrders.filter(o => {
+      const d = parseOrderDate(o.date);
+      if (from && d < from) return false;
+      if (to   && d > to)   return false;
+      return true;
+    });
+  }
+
+  // ── Parse "Name x2, Name x1" ─────────────────────────────────
+  function parseItems(str) {
+    if (!str) return [];
+    return str.split(',').map(s => {
+      const m = s.trim().match(/^(.+?)\s+x(\d+)$/i);
+      return m ? { name: m[1].trim(), qty: parseInt(m[2]) } : null;
+    }).filter(Boolean);
+  }
+
+  // ── Main render ───────────────────────────────────────────────
+  function render() {
+    const filtered = getFiltered();
+
+    // Stats
+    const totalRev   = filtered.reduce((s, o) => s + (Number(o.total) || 0), 0);
+    const totalItems = filtered.reduce((s, o) => s + parseItems(o.items).reduce((a,i)=>a+i.qty,0), 0);
+    const avg        = filtered.length ? Math.round(totalRev / filtered.length) : 0;
+
+    document.getElementById('s-orders').textContent  = filtered.length;
+    document.getElementById('s-revenue').textContent = '₹' + totalRev.toLocaleString('en-IN');
+    document.getElementById('s-items').textContent   = totalItems;
+    document.getElementById('s-avg').textContent     = '₹' + avg;
+
+    // Period label
+    const from = document.getElementById('fromDate').value;
+    const to   = document.getElementById('toDate').value;
+    const label = (!from && !to) ? 'All Time' : from === to ? from : `${from} – ${to}`;
+    document.getElementById('revPeriod').textContent = label;
+
+    renderItemsList(filtered);
+    renderRevenueChart(filtered);
+    renderOrdersChart(filtered);
+  }
+
+  // ── Top Items ranked list ─────────────────────────────────────
+  function renderItemsList(orders) {
+    const counts = {};
+    orders.forEach(o => {
+      parseItems(o.items).forEach(({ name, qty }) => {
+        counts[name] = (counts[name] || 0) + qty;
+      });
+    });
+
+    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+    const max = sorted[0]?.[1] || 1;
+    const wrap = document.getElementById('itemsList');
+
+    if (!sorted.length) {
+      wrap.innerHTML = '<div class="empty">No data for this period.</div>';
+      return;
+    }
+
+    const rankClass = i => i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+    wrap.innerHTML = sorted.slice(0,15).map(([name,qty],i) => `
+      <div class="item-row">
+        <div class="rank ${rankClass(i)}">${i+1}</div>
+        <div class="item-name">${name}</div>
+        <div class="item-bar-wrap"><div class="item-bar" style="width:${Math.round(qty/max*100)}%"></div></div>
+        <div class="item-qty">${qty} pcs</div>
+      </div>`).join('');
+  }
+
+  // ── Day-wise Revenue bar chart ────────────────────────────────
+  function renderRevenueChart(orders) {
+    const wrap = document.getElementById('revenueChartWrap');
+
+    // Group by day
+    const byDay = {};
+    orders.forEach(o => {
+      const key = dayLabel(o.date) || 'Unknown';
+      byDay[key] = (byDay[key] || 0) + (Number(o.total) || 0);
+    });
+
+    const labels = Object.keys(byDay);
+    const values = Object.values(byDay);
+
+    if (!labels.length) {
+      wrap.innerHTML = '<div class="empty">No data for this period.</div>';
+      if (revenueChart) { revenueChart.destroy(); revenueChart = null; }
+      return;
+    }
+
+    if (!wrap.querySelector('canvas')) {
+      wrap.innerHTML = '<canvas id="revenueCanvas"></canvas>';
+    }
+    const ctx = document.getElementById('revenueCanvas').getContext('2d');
+    if (revenueChart) revenueChart.destroy();
+
+    revenueChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Revenue (₹)',
+          data: values,
+          backgroundColor: labels.map((_,i) =>
+            `rgba(233,30,140,${0.55 + 0.4*(i/Math.max(labels.length-1,1))})`),
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ' ₹' + ctx.parsed.y.toLocaleString('en-IN')
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: 'Poppins', size: 11 } } },
+          y: {
+            grid: { color: '#F2D5E8' },
+            ticks: {
+              font: { family: 'Poppins', size: 11 },
+              callback: v => '₹' + v.toLocaleString('en-IN')
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ── Orders per day bar chart ──────────────────────────────────
+  function renderOrdersChart(orders) {
+    const wrap = document.getElementById('ordersChartWrap');
+
+    const byDay = {};
+    orders.forEach(o => {
+      const key = dayLabel(o.date) || 'Unknown';
+      byDay[key] = (byDay[key] || 0) + 1;
+    });
+
+    const labels = Object.keys(byDay);
+    const values = Object.values(byDay);
+
+    if (!labels.length) {
+      wrap.innerHTML = '<div class="empty">No data for this period.</div>';
+      if (ordersChart) { ordersChart.destroy(); ordersChart = null; }
+      return;
+    }
+
+    if (!wrap.querySelector('canvas')) {
+      wrap.innerHTML = '<canvas id="ordersCanvas"></canvas>';
+    }
+    const ctx = document.getElementById('ordersCanvas').getContext('2d');
+    if (ordersChart) ordersChart.destroy();
+
+    ordersChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Orders',
+          data: values,
+          backgroundColor: labels.map((_,i) =>
+            `rgba(255,107,107,${0.55 + 0.4*(i/Math.max(labels.length-1,1))})`),
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: 'Poppins', size: 11 } } },
+          y: {
+            grid: { color: '#F2D5E8' },
+            ticks: { font: { family: 'Poppins', size: 11 }, stepSize: 1 }
+          }
+        }
+      }
+    });
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  setQuick('all');
+  loadData();
+</script>
+
+</body>
+</html>
