@@ -23,46 +23,33 @@
       --r:       12px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Poppins', 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text);
+      min-height: 100dvh; -webkit-font-smoothing: antialiased;
     }
 
     /* ── Header ── */
     .header {
-      background: var(--grad);
-      color: white;
+      background: var(--grad); color: white;
       padding: 13px 16px;
       padding-top: calc(13px + env(safe-area-inset-top));
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
       box-shadow: 0 4px 20px rgba(233,30,140,0.30);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      position: sticky; top: 0; z-index: 10;
     }
     .back-btn {
-      background: rgba(255,255,255,0.22);
-      border: none; color: white;
-      width: 36px; height: 36px;
-      border-radius: 50%; font-size: 1.1rem;
-      cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      text-decoration: none; flex-shrink: 0;
-      transition: background 0.2s;
+      background: rgba(255,255,255,0.22); border: none; color: white;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      text-decoration: none; flex-shrink: 0; transition: background 0.2s;
     }
     .back-btn:hover { background: rgba(255,255,255,0.35); }
     .header-info  { flex: 1; }
     .header-title { font-size: 1rem; font-weight: 800; }
     .header-sub   { font-size: 0.68rem; opacity: 0.85; }
     .refresh-btn {
-      background: rgba(255,255,255,0.22);
-      border: none; color: white;
+      background: rgba(255,255,255,0.22); border: none; color: white;
       padding: 7px 14px; border-radius: 999px;
       font-family: inherit; font-size: 0.78rem; font-weight: 600;
       cursor: pointer; flex-shrink: 0; transition: background 0.2s;
@@ -71,58 +58,146 @@
     .refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     /* ── Content ── */
-    .content { max-width: 900px; margin: 0 auto; padding: 18px 14px 40px; }
+    .content { max-width: 960px; margin: 0 auto; padding: 16px 14px 40px; }
 
     /* ── Stats ── */
     .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px; margin-bottom: 20px;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 16px;
     }
     .stat-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--r);
-      padding: 14px 12px; text-align: center;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r); padding: 14px 12px; text-align: center;
       box-shadow: var(--shadow);
     }
     .stat-val {
       font-size: 1.4rem; font-weight: 800;
       background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text; line-height: 1.2;
     }
     .stat-label { font-size: 0.68rem; font-weight: 600; color: var(--muted); margin-top: 3px; }
 
-    /* ── Orders Table ── */
-    .table-wrap {
+    /* ── Date Filter Bar ── */
+    .filter-bar {
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: var(--r);
-      box-shadow: var(--shadow); overflow: hidden;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-label {
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--muted); letter-spacing: 0.4px;
+      text-transform: uppercase; flex-shrink: 0;
+    }
+
+    /* Quick buttons */
+    .quick-btns {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .quick-btn {
+      padding: 6px 13px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text-2);
+      border-radius: 999px; font-family: inherit;
+      font-size: 0.76rem; font-weight: 600;
+      cursor: pointer; transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .quick-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .quick-btn.active {
+      background: var(--grad); border-color: transparent;
+      color: white; box-shadow: 0 3px 10px rgba(233,30,140,0.28);
+    }
+
+    /* Date inputs */
+    .date-inputs {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto;
+    }
+    .date-inputs label { font-size: 0.74rem; font-weight: 600; color: var(--text-2); }
+    .date-inputs input[type="date"] {
+      padding: 6px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: inherit;
+      font-size: 0.8rem; color: var(--text);
+      background: var(--bg); outline: none;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .date-inputs input[type="date"]:focus { border-color: var(--pink); }
+
+    /* Result count */
+    .result-info {
+      font-size: 0.76rem; color: var(--muted); font-weight: 500;
+      margin-bottom: 10px; padding: 0 2px;
+    }
+    .result-info strong { color: var(--pink); }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden;
+      margin-bottom: 14px;
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     thead { background: var(--grad); color: white; }
-    th { padding: 12px 14px; text-align: left; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.4px; white-space: nowrap; }
+    th { padding: 11px 14px; text-align: left; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.4px; white-space: nowrap; }
     td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-    tr.deleting td   { background: var(--red-bg); transition: background 0.2s; }
+    tr:hover td      { background: #FFF8FC; }
+    tr.deleting td   { background: var(--red-bg); }
     .td-id    { font-weight: 700; color: var(--pink); white-space: nowrap; }
     .td-dt    { color: var(--text-2); font-size: 0.76rem; white-space: nowrap; }
     .td-items { color: var(--text-2); line-height: 1.5; }
     .td-total { font-weight: 800; color: var(--pink); white-space: nowrap; }
     .td-acts  { white-space: nowrap; }
-
     .btn-edit, .btn-del {
-      border: none; border-radius: 8px;
-      padding: 6px 12px; font-family: inherit;
-      font-size: 0.75rem; font-weight: 600;
-      cursor: pointer; transition: opacity 0.2s;
+      border: none; border-radius: 8px; padding: 6px 11px;
+      font-family: inherit; font-size: 0.73rem; font-weight: 600;
+      cursor: pointer; transition: opacity 0.18s;
     }
-    .btn-edit { background: #EDE9FE; color: #7C3AED; margin-right: 6px; }
+    .btn-edit { background: #EDE9FE; color: #7C3AED; margin-right: 5px; }
     .btn-del  { background: var(--red-bg); color: var(--red); }
-    .btn-edit:hover, .btn-del:hover { opacity: 0.78; }
+    .btn-edit:hover, .btn-del:hover { opacity: 0.75; }
+
+    /* ── Pagination ── */
+    .pagination {
+      display: none; align-items: center; justify-content: center;
+      gap: 6px; flex-wrap: wrap; margin-top: 4px;
+    }
+    .page-btn {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text-2);
+      border-radius: 8px; font-family: inherit;
+      font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.18s;
+    }
+    .page-btn:hover:not(:disabled) { border-color: var(--pink); color: var(--pink); }
+    .page-btn.active {
+      background: var(--grad); border-color: transparent;
+      color: white; box-shadow: 0 3px 10px rgba(233,30,140,0.28);
+    }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .page-nav {
+      padding: 0 12px; height: 36px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text-2);
+      border-radius: 8px; font-family: inherit;
+      font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 4px;
+      transition: all 0.18s; white-space: nowrap;
+    }
+    .page-nav:hover:not(:disabled) { border-color: var(--pink); color: var(--pink); }
+    .page-nav:disabled { opacity: 0.35; cursor: not-allowed; }
+    .page-ellipsis { font-size: 0.82rem; color: var(--muted); padding: 0 2px; }
 
     /* ── State boxes ── */
     .state-box { text-align: center; padding: 56px 20px; color: var(--muted); }
@@ -130,102 +205,55 @@
     .state-msg  { font-size: 0.88rem; font-weight: 500; line-height: 1.6; }
     .state-box.error { color: var(--red); }
 
-    /* ════════════════════════════════════════
-       EDIT MODAL  (full mini-POS)
-    ════════════════════════════════════════ */
+    /* ════════════ EDIT MODAL ════════════ */
     .modal-bg {
-      display: none;
-      position: fixed; inset: 0;
+      display: none; position: fixed; inset: 0;
       background: rgba(26,10,18,0.55);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 200;
-      align-items: flex-end;
-      justify-content: center;
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      z-index: 200; align-items: flex-end; justify-content: center;
     }
     .modal-bg.open { display: flex; }
-
     .edit-modal {
-      background: var(--surface);
-      width: 100%;
-      max-width: 560px;
-      max-height: 92dvh;
-      border-radius: 22px 22px 0 0;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      background: var(--surface); width: 100%; max-width: 560px;
+      max-height: 92dvh; border-radius: 22px 22px 0 0;
+      display: flex; flex-direction: column; overflow: hidden;
       animation: slideUp 0.30s cubic-bezier(0.32,0.72,0,1);
       box-shadow: 0 -12px 48px rgba(233,30,140,0.22);
     }
-
     @keyframes slideUp {
       from { transform: translateY(100%); opacity: 0; }
       to   { transform: translateY(0);    opacity: 1; }
     }
-
-    /* Drag handle */
     .modal-handle {
-      width: 40px; height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin: 10px auto 0;
-      flex-shrink: 0;
+      width: 40px; height: 4px; background: var(--border);
+      border-radius: 2px; margin: 10px auto 0; flex-shrink: 0;
     }
-
-    /* Modal header */
     .modal-head {
-      background: var(--grad);
-      color: white;
-      padding: 14px 16px;
-      display: flex; align-items: center; gap: 10px;
-      flex-shrink: 0;
+      background: var(--grad); color: white;
+      padding: 14px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
     .modal-title { flex: 1; font-size: 0.95rem; font-weight: 700; }
     .modal-close-btn {
       background: rgba(255,255,255,0.22); border: none; color: white;
-      width: 30px; height: 30px; border-radius: 50%;
-      font-size: 0.82rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 50%; font-size: 0.82rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
-
-    /* ── Current order items (inside edit modal) ── */
     .edit-order-section {
-      flex-shrink: 0;
-      max-height: 200px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
+      flex-shrink: 0; max-height: 200px; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border); background: var(--bg);
     }
-
-    .edit-order-label {
-      padding: 10px 16px 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    .edit-section-label {
+      padding: 10px 16px 6px; font-size: 0.68rem; font-weight: 700;
+      color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase;
     }
-
-    .edit-empty-order {
-      text-align: center;
-      padding: 16px;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
+    .edit-empty-order { text-align: center; padding: 14px; color: var(--muted); font-size: 0.8rem; }
     .edit-order-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-bottom: 1px solid var(--border);
     }
     .edit-order-item:last-child { border-bottom: none; }
     .eoi-name  { flex: 1; font-size: 0.8rem; font-weight: 500; }
     .eoi-total { min-width: 46px; text-align: right; font-size: 0.82rem; font-weight: 700; color: var(--pink); }
-
-    /* qty controls */
     .qty-ctrl {
       display: flex; align-items: center; gap: 3px;
       background: var(--surface); border-radius: 999px; padding: 2px;
@@ -236,163 +264,98 @@
       background: transparent; color: var(--pink);
       font-size: 1rem; font-weight: 700; font-family: inherit;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, color 0.15s;
-      -webkit-tap-highlight-color: transparent; line-height: 1;
+      transition: background 0.15s, color 0.15s; -webkit-tap-highlight-color: transparent; line-height: 1;
     }
     .qty-btn:hover { background: var(--pink); color: white; }
     .qty-num { min-width: 22px; text-align: center; font-size: 0.82rem; font-weight: 700; }
-
-    /* ── Total + Save bar ── */
     .edit-total-bar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 2px solid var(--border);
-      flex-shrink: 0;
-      background: var(--surface);
-      gap: 12px;
+      padding: 12px 16px; border-bottom: 2px solid var(--border); flex-shrink: 0; gap: 12px;
     }
-    .edit-total-label { font-size: 0.82rem; font-weight: 600; color: var(--text-2); }
-    .edit-total-val   {
-      font-size: 1.3rem; font-weight: 800;
-      background: var(--grad);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .edit-total-label { font-size: 0.78rem; font-weight: 600; color: var(--text-2); }
+    .edit-total-val {
+      font-size: 1.25rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
     }
     .btn-save {
-      padding: 10px 20px;
-      background: var(--grad); color: white;
-      border: none; border-radius: 10px;
-      font-family: inherit; font-size: 0.85rem; font-weight: 700;
-      cursor: pointer; white-space: nowrap;
-      box-shadow: 0 3px 12px rgba(233,30,140,0.35);
-      transition: opacity 0.2s;
-      flex-shrink: 0;
+      padding: 10px 20px; background: var(--grad); color: white; border: none;
+      border-radius: 10px; font-family: inherit; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap; box-shadow: 0 3px 12px rgba(233,30,140,0.35);
+      transition: opacity 0.2s; flex-shrink: 0;
     }
     .btn-save:hover    { opacity: 0.88; }
     .btn-save:disabled { opacity: 0.45; cursor: not-allowed; }
-
-    /* ── Menu section (inside edit modal) ── */
-    .edit-menu-section {
-      display: flex; flex-direction: column;
-      flex: 1; min-height: 0; overflow: hidden;
-    }
-
-    .edit-menu-label {
-      padding: 10px 16px 6px;
-      font-size: 0.72rem; font-weight: 700;
-      color: var(--muted); letter-spacing: 0.5px;
-      text-transform: uppercase; flex-shrink: 0;
-      background: var(--surface);
-    }
-
-    /* Category tabs */
+    .edit-menu-section { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
     .edit-cats {
-      display: flex; gap: 7px;
-      padding: 6px 14px 10px;
-      overflow-x: auto; flex-shrink: 0;
-      scrollbar-width: none;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      -webkit-overflow-scrolling: touch;
+      display: flex; gap: 7px; padding: 8px 14px;
+      overflow-x: auto; flex-shrink: 0; scrollbar-width: none;
+      border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch;
     }
     .edit-cats::-webkit-scrollbar { display: none; }
     .edit-cat-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 7px 16px; border: 2px solid var(--border);
-      background: var(--surface); color: var(--text-2);
-      border-radius: 999px; font-family: inherit;
-      font-size: 0.8rem; font-weight: 600;
-      white-space: nowrap; cursor: pointer;
-      transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+      display: inline-flex; align-items: center; gap: 5px; padding: 7px 15px;
+      border: 2px solid var(--border); background: var(--surface); color: var(--text-2);
+      border-radius: 999px; font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      white-space: nowrap; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
     }
-    .edit-cat-btn.active {
-      background: var(--grad); border-color: transparent;
-      color: white; box-shadow: 0 3px 10px rgba(233,30,140,0.30);
-    }
-
-    /* Item grid */
+    .edit-cat-btn.active { background: var(--grad); border-color: transparent; color: white; }
     .edit-items-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 9px; padding: 12px;
-      overflow-y: auto; flex: 1;
-      align-content: start;
-      -webkit-overflow-scrolling: touch;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 9px; padding: 12px; overflow-y: auto; flex: 1;
+      align-content: start; -webkit-overflow-scrolling: touch;
     }
-
     .edit-item-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 10px 10px;
-      cursor: pointer;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 11px 10px 10px; cursor: pointer;
       display: flex; flex-direction: column; gap: 8px;
       box-shadow: 0 2px 8px rgba(233,30,140,0.07);
       transition: transform 0.15s, border-color 0.15s;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+      -webkit-tap-highlight-color: transparent; user-select: none;
     }
     .edit-item-card:hover  { border-color: var(--pink); transform: translateY(-2px); }
     .edit-item-card:active { transform: scale(0.96); }
-
-    @keyframes miniPop {
-      0%  { transform: scale(1); }
-      45% { transform: scale(1.07); }
-      100%{ transform: scale(1); }
-    }
+    @keyframes miniPop { 0%{transform:scale(1)} 45%{transform:scale(1.07)} 100%{transform:scale(1)} }
     .edit-item-card.pop { animation: miniPop 0.2s ease forwards; }
-
     .eic-name  { font-size: 0.78rem; font-weight: 600; line-height: 1.3; }
     .eic-foot  { display: flex; align-items: center; justify-content: space-between; }
     .eic-price {
-      font-size: 0.85rem; font-weight: 800;
-      background: var(--grad);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 0.85rem; font-weight: 800; background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .eic-plus {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--grad); color: white;
+      width: 24px; height: 24px; border-radius: 50%; background: var(--grad); color: white;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; font-weight: 700;
-      box-shadow: 0 2px 6px rgba(233,30,140,0.35);
+      font-size: 1rem; font-weight: 700; box-shadow: 0 2px 6px rgba(233,30,140,0.35);
     }
 
-    /* ════════════════════════════════════════
-       DELETE CONFIRM MODAL
-    ════════════════════════════════════════ */
+    /* ════════════ DELETE MODAL ════════════ */
     .del-modal-bg {
       display: none; position: fixed; inset: 0;
       background: rgba(26,10,18,0.55);
       backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      z-index: 300;
-      align-items: center; justify-content: center; padding: 20px;
+      z-index: 300; align-items: center; justify-content: center; padding: 20px;
     }
     .del-modal-bg.open { display: flex; }
     .del-modal {
-      background: var(--surface); border-radius: 18px;
-      width: 100%; max-width: 340px;
+      background: var(--surface); border-radius: 18px; width: 100%; max-width: 340px;
       padding: 28px 24px 22px; text-align: center;
-      box-shadow: 0 20px 60px rgba(239,68,68,0.20);
-      animation: slideUp 0.22s ease;
+      box-shadow: 0 20px 60px rgba(239,68,68,0.20); animation: slideUp 0.22s ease;
     }
     .del-icon  { font-size: 2.4rem; margin-bottom: 12px; }
     .del-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
     .del-msg   { font-size: 0.82rem; color: var(--text-2); margin-bottom: 22px; line-height: 1.6; }
     .del-actions { display: flex; gap: 10px; }
     .btn-del-cancel {
-      flex: 1; padding: 12px; background: transparent;
-      color: var(--muted); border: 1.5px solid var(--border);
-      border-radius: 10px; font-family: inherit;
+      flex: 1; padding: 12px; background: transparent; color: var(--muted);
+      border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit;
       font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
     }
     .btn-del-cancel:hover { border-color: var(--pink); color: var(--pink); }
     .btn-del-confirm {
-      flex: 1; padding: 12px; background: var(--red);
-      color: white; border: none; border-radius: 10px;
-      font-family: inherit; font-size: 0.85rem; font-weight: 700;
-      cursor: pointer; box-shadow: 0 3px 12px rgba(239,68,68,0.35);
-      transition: opacity 0.2s;
+      flex: 1; padding: 12px; background: var(--red); color: white; border: none;
+      border-radius: 10px; font-family: inherit; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; box-shadow: 0 3px 12px rgba(239,68,68,0.35); transition: opacity 0.2s;
     }
     .btn-del-confirm:hover    { opacity: 0.88; }
     .btn-del-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -403,22 +366,23 @@
       transform: translateX(-50%) translateY(12px);
       background: #1A0A12EE; color: white;
       padding: 11px 26px; border-radius: 999px;
-      font-size: 0.86rem; font-weight: 500;
-      z-index: 999; opacity: 0; pointer-events: none;
+      font-size: 0.86rem; font-weight: 500; z-index: 999;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.25s, transform 0.25s;
       white-space: nowrap; max-width: 90vw; text-align: center;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* ── Mobile ── */
-    @media (max-width: 540px) {
-      .stats       { gap: 8px; }
-      .stat-val    { font-size: 1.1rem; }
-      .stat-label  { font-size: 0.62rem; }
+    @media (max-width: 600px) {
+      .stats { gap: 8px; }
+      .stat-val   { font-size: 1.1rem; }
+      .stat-label { font-size: 0.6rem; }
       th:nth-child(2), td:nth-child(2) { display: none; }
-
-      .edit-modal  { max-height: 96dvh; border-radius: 20px 20px 0 0; }
+      .filter-bar { gap: 8px; }
+      .date-inputs { margin-left: 0; width: 100%; }
       .edit-items-grid { grid-template-columns: repeat(2, 1fr); }
+      .edit-modal { max-height: 96dvh; }
     }
   </style>
 </head>
@@ -434,33 +398,56 @@
   </header>
 
   <div class="content">
+
+    <!-- Stats -->
     <div class="stats" id="stats" style="display:none">
-      <div class="stat-card"><div class="stat-val" id="stat-count">0</div><div class="stat-label">Total Orders</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-revenue">₹0</div><div class="stat-label">Total Revenue</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-avg">₹0</div><div class="stat-label">Avg Order Value</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-count">0</div><div class="stat-label">Orders</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-revenue">₹0</div><div class="stat-label">Revenue</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-avg">₹0</div><div class="stat-label">Avg Order</div></div>
     </div>
+
+    <!-- Date Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter</span>
+      <div class="quick-btns">
+        <button class="quick-btn active" data-period="today"     onclick="setQuick('today')">Today</button>
+        <button class="quick-btn"        data-period="yesterday" onclick="setQuick('yesterday')">Yesterday</button>
+        <button class="quick-btn"        data-period="week"      onclick="setQuick('week')">This Week</button>
+        <button class="quick-btn"        data-period="month"     onclick="setQuick('month')">This Month</button>
+      </div>
+      <div class="date-inputs">
+        <label>From</label>
+        <input type="date" id="date-from" onchange="onDateChange()" />
+        <label>To</label>
+        <input type="date" id="date-to"   onchange="onDateChange()" />
+      </div>
+    </div>
+
+    <!-- Result count -->
+    <div class="result-info" id="result-info"></div>
+
+    <!-- Table -->
     <div class="table-wrap" id="table-wrap">
       <div class="state-box"><div class="state-icon">⏳</div><div class="state-msg">Loading orders…</div></div>
     </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
   </div>
 
   <!-- ════ EDIT MODAL ════ -->
   <div class="modal-bg" id="edit-modal-bg">
     <div class="edit-modal">
       <div class="modal-handle"></div>
-
       <div class="modal-head">
         <span class="modal-title" id="edit-modal-title">Edit Order</span>
         <button class="modal-close-btn" onclick="closeEditModal()">✕</button>
       </div>
-
-      <!-- Current order items -->
       <div class="edit-order-section">
-        <div class="edit-order-label">Current Order</div>
+        <div class="edit-section-label">Current Order</div>
         <div id="edit-order-list"></div>
       </div>
-
-      <!-- Total + Save -->
       <div class="edit-total-bar">
         <div>
           <div class="edit-total-label">Total Amount</div>
@@ -468,14 +455,11 @@
         </div>
         <button class="btn-save" id="btn-save" onclick="saveEdit()">Save Changes</button>
       </div>
-
-      <!-- Add from menu -->
       <div class="edit-menu-section">
-        <div class="edit-menu-label">Add Items from Menu</div>
+        <div class="edit-section-label" style="padding:10px 16px 6px; background:var(--surface)">Add Items from Menu</div>
         <div class="edit-cats" id="edit-cats"></div>
         <div class="edit-items-grid" id="edit-items-grid"></div>
       </div>
-
     </div>
   </div>
 
@@ -495,58 +479,148 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const CAT_META = { 'Kulfi': '🍧', 'Ice Cream': '🍦', 'Lassi': '🥛' };
+    /* ══════════════════════════════════════════════
+       CONFIG
+    ══════════════════════════════════════════════ */
+    const PAGE_SIZE  = 15;
+    const CAT_META   = { 'Kulfi': '🍧', 'Ice Cream': '🍦', 'Lassi': '🥛' };
 
-    let allOrders      = [];
-    let menuData       = [];
-    let editItems      = [];   // [{id, name, price, qty}]
-    let editingOrderId = null;
-    let editActiveCat  = '';
+    let allOrders       = [];
+    let filteredOrders  = [];
+    let currentPage     = 1;
+    let startDate       = '';
+    let endDate         = '';
+    let menuData        = [];
+    let editItems       = [];
+    let editingOrderId  = null;
+    let editActiveCat   = '';
     let deletingOrderId = null;
 
-    /* ══ Load menu once ══ */
-    fetch('/menu.json').then(r => r.json()).then(d => { menuData = d; });
+    /* ══ Date helpers ══ */
+    function fmt(d) {
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function todayStr()     { return fmt(new Date()); }
+    function yesterdayStr() { const d = new Date(); d.setDate(d.getDate()-1); return fmt(d); }
+
+    function parseOrderDate(str) {
+      /* Handles: "25/04/2026, 14:30"  →  "2026-04-25" */
+      if (!str) return '';
+      const part = str.split(',')[0].trim();
+      const p = part.split('/');
+      if (p.length === 3) return `${p[2]}-${p[1]}-${p[0]}`;
+      /* Fallback: try ISO */
+      return str.substring(0, 10);
+    }
+
+    /* ══ Init dates ══ */
+    function initDates() {
+      startDate = endDate = todayStr();
+      document.getElementById('date-from').value = startDate;
+      document.getElementById('date-to').value   = endDate;
+    }
+
+    /* ══ Quick date buttons ══ */
+    function setQuick(period) {
+      const today = new Date();
+      switch (period) {
+        case 'today':
+          startDate = endDate = todayStr(); break;
+        case 'yesterday':
+          startDate = endDate = yesterdayStr(); break;
+        case 'week': {
+          const d = new Date(today);
+          const diff = (d.getDay() + 6) % 7; // days since Monday
+          d.setDate(d.getDate() - diff);
+          startDate = fmt(d); endDate = todayStr(); break;
+        }
+        case 'month':
+          startDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-01`;
+          endDate = todayStr(); break;
+      }
+      document.getElementById('date-from').value = startDate;
+      document.getElementById('date-to').value   = endDate;
+      document.querySelectorAll('.quick-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.period === period)
+      );
+      filterAndRender();
+    }
+
+    function onDateChange() {
+      startDate = document.getElementById('date-from').value;
+      endDate   = document.getElementById('date-to').value;
+      document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+      filterAndRender();
+    }
 
     /* ══ Load orders ══ */
     async function loadOrders() {
       const wrap = document.getElementById('table-wrap');
       const btn  = document.getElementById('refresh-btn');
       btn.disabled = true; btn.textContent = '⏳ Loading…';
-      document.getElementById('stats').style.display = 'none';
       wrap.innerHTML = `<div class="state-box"><div class="state-icon">⏳</div><div class="state-msg">Loading orders…</div></div>`;
+      document.getElementById('stats').style.display = 'none';
+      document.getElementById('pagination').style.display = 'none';
+      document.getElementById('result-info').textContent = '';
 
       try {
         const res = await fetch('/api/orders');
         if (!res.ok) throw new Error();
         allOrders = await res.json();
-        renderTable();
+        filterAndRender();
       } catch {
         wrap.innerHTML = `<div class="state-box error"><div class="state-icon">❌</div><div class="state-msg">Could not load orders.<br/>Check your Google Sheets credentials.</div></div>`;
       }
       btn.disabled = false; btn.textContent = '↻ Refresh';
     }
 
-    /* ══ Render table ══ */
+    /* ══ Filter → render ══ */
+    function filterAndRender() {
+      filteredOrders = allOrders.filter(o => {
+        const d = parseOrderDate(o.dateTime);
+        return d >= startDate && d <= endDate;
+      });
+      currentPage = 1;
+      renderStats();
+      renderTable();
+      renderPagination();
+      renderResultInfo();
+    }
+
+    /* ══ Stats (for filtered set) ══ */
+    function renderStats() {
+      const el = document.getElementById('stats');
+      if (filteredOrders.length === 0) { el.style.display = 'none'; return; }
+      const revenue = filteredOrders.reduce((s, o) => s + Number(o.total || 0), 0);
+      document.getElementById('stat-count').textContent   = filteredOrders.length;
+      document.getElementById('stat-revenue').textContent = `₹${revenue}`;
+      document.getElementById('stat-avg').textContent     = `₹${Math.round(revenue / filteredOrders.length)}`;
+      el.style.display = 'grid';
+    }
+
+    /* ══ Result info line ══ */
+    function renderResultInfo() {
+      const el = document.getElementById('result-info');
+      if (filteredOrders.length === 0) { el.textContent = ''; return; }
+      const start = (currentPage - 1) * PAGE_SIZE + 1;
+      const end   = Math.min(currentPage * PAGE_SIZE, filteredOrders.length);
+      el.innerHTML = `Showing <strong>${start}–${end}</strong> of <strong>${filteredOrders.length}</strong> orders`;
+    }
+
+    /* ══ Table ══ */
     function renderTable() {
       const wrap = document.getElementById('table-wrap');
-      if (allOrders.length === 0) {
-        wrap.innerHTML = `<div class="state-box"><div class="state-icon">🍧</div><div class="state-msg">No orders yet.<br/>Place your first order from the POS.</div></div>`;
+      if (filteredOrders.length === 0) {
+        wrap.innerHTML = `<div class="state-box"><div class="state-icon">🍧</div><div class="state-msg">No orders found for the selected period.</div></div>`;
         return;
       }
-      const revenue = allOrders.reduce((s, o) => s + Number(o.total || 0), 0);
-      document.getElementById('stat-count').textContent   = allOrders.length;
-      document.getElementById('stat-revenue').textContent = `₹${revenue}`;
-      document.getElementById('stat-avg').textContent     = `₹${Math.round(revenue / allOrders.length)}`;
-      document.getElementById('stats').style.display      = 'grid';
-
+      const slice = filteredOrders.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
       wrap.innerHTML = `
         <table>
           <thead>
             <tr><th>#Order</th><th>Date &amp; Time</th><th>Items</th><th>Total</th><th>Actions</th></tr>
           </thead>
-          <tbody id="orders-tbody">
-            ${allOrders.map(o => orderRow(o)).join('')}
-          </tbody>
+          <tbody>${slice.map(orderRow).join('')}</tbody>
         </table>`;
     }
 
@@ -564,9 +638,51 @@
         </tr>`;
     }
 
-    /* ══════════════════════════════════
+    /* ══ Pagination ══ */
+    function renderPagination() {
+      const el    = document.getElementById('pagination');
+      const total = Math.ceil(filteredOrders.length / PAGE_SIZE);
+      if (total <= 1) { el.style.display = 'none'; return; }
+
+      el.style.display = 'flex';
+
+      // Build page number window
+      let pages = [];
+      if (total <= 7) {
+        pages = Array.from({ length: total }, (_, i) => i + 1);
+      } else {
+        pages = [1];
+        if (currentPage > 3)         pages.push('…');
+        for (let i = Math.max(2, currentPage-1); i <= Math.min(total-1, currentPage+1); i++) pages.push(i);
+        if (currentPage < total - 2) pages.push('…');
+        pages.push(total);
+      }
+
+      el.innerHTML = `
+        <button class="page-nav" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>&#8592; Prev</button>
+        ${pages.map(p =>
+          p === '…'
+            ? `<span class="page-ellipsis">…</span>`
+            : `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`
+        ).join('')}
+        <button class="page-nav" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>Next &#8594;</button>`;
+    }
+
+    function goPage(p) {
+      const total = Math.ceil(filteredOrders.length / PAGE_SIZE);
+      if (p < 1 || p > total) return;
+      currentPage = p;
+      renderTable();
+      renderPagination();
+      renderResultInfo();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ══════════════════════════════════════════════
        EDIT MODAL — mini POS
-    ══════════════════════════════════ */
+    ══════════════════════════════════════════════ */
+    fetch('/menu.json').then(r => r.json()).then(d => { menuData = d; });
+
     function parseOrderString(str) {
       return str.split(',').map(part => {
         const m = part.trim().match(/^(.+?)\s+x(\d+)$/i);
@@ -574,54 +690,43 @@
         const name = m[1].trim();
         const qty  = parseInt(m[2]);
         const mi   = menuData.find(i => i.name.toLowerCase() === name.toLowerCase());
-        return mi
-          ? { id: mi.id, name: mi.name, price: mi.price, qty }
-          : { id: `custom-${Date.now()}`, name, price: 0, qty };
+        return mi ? { id: mi.id, name: mi.name, price: mi.price, qty }
+                  : { id: `c${Date.now()}`, name, price: 0, qty };
       }).filter(Boolean);
     }
 
     function openEditModal(orderId) {
       const order = allOrders.find(o => String(o.orderId) === String(orderId));
       if (!order) return;
-
       editingOrderId = orderId;
       editItems = parseOrderString(order.items);
-
       document.getElementById('edit-modal-title').textContent = `Edit Order #${orderId}`;
       document.getElementById('edit-modal-bg').classList.add('open');
-
-      // Setup category tabs
-      const categories = [...new Set(menuData.map(i => i.category))];
-      editActiveCat = categories[0];
-      renderEditCats(categories);
+      const cats = [...new Set(menuData.map(i => i.category))];
+      editActiveCat = cats[0];
+      renderEditCats(cats);
       renderEditMenuItems();
       renderEditOrder();
     }
 
     function closeEditModal() {
       document.getElementById('edit-modal-bg').classList.remove('open');
-      editingOrderId = null;
-      editItems = [];
+      editingOrderId = null; editItems = [];
     }
 
-    /* ── Edit: category tabs ── */
-    function renderEditCats(categories) {
-      document.getElementById('edit-cats').innerHTML = categories.map(cat => `
-        <button class="edit-cat-btn ${cat === editActiveCat ? 'active' : ''}"
-          data-cat="${cat}" onclick="setEditCat('${cat}')">
-          ${CAT_META[cat] || '🍽️'} ${cat}
+    function renderEditCats(cats) {
+      document.getElementById('edit-cats').innerHTML = cats.map(c => `
+        <button class="edit-cat-btn ${c===editActiveCat?'active':''}" data-cat="${c}" onclick="setEditCat('${c}')">
+          ${CAT_META[c]||'🍽️'} ${c}
         </button>`).join('');
     }
 
     function setEditCat(cat) {
       editActiveCat = cat;
-      document.querySelectorAll('.edit-cat-btn').forEach(b =>
-        b.classList.toggle('active', b.dataset.cat === cat)
-      );
+      document.querySelectorAll('.edit-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
       renderEditMenuItems();
     }
 
-    /* ── Edit: menu items grid ── */
     function renderEditMenuItems() {
       document.getElementById('edit-items-grid').innerHTML = menuData
         .filter(i => i.category === editActiveCat)
@@ -635,20 +740,15 @@
           </div>`).join('');
     }
 
-    /* ── Edit: add item to current order ── */
     function editAddItem(id) {
       const mi = menuData.find(i => i.id === id);
       const ex = editItems.find(i => i.id === id);
-      if (ex) { ex.qty++; }
-      else     { editItems.push({ id: mi.id, name: mi.name, price: mi.price, qty: 1 }); }
-
+      if (ex) { ex.qty++; } else { editItems.push({ id: mi.id, name: mi.name, price: mi.price, qty: 1 }); }
       const card = document.getElementById(`eic-${id}`);
       if (card) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); }
-
       renderEditOrder();
     }
 
-    /* ── Edit: qty controls ── */
     function editUpdateQty(id, delta) {
       const item = editItems.find(i => i.id === id);
       if (!item) return;
@@ -657,19 +757,15 @@
       renderEditOrder();
     }
 
-    /* ── Edit: render current order list ── */
     function renderEditOrder() {
       const list  = document.getElementById('edit-order-list');
       const total = editItems.reduce((s, i) => s + i.price * i.qty, 0);
-
       document.getElementById('edit-total-val').textContent = `₹${total}`;
       document.getElementById('btn-save').disabled = editItems.length === 0;
-
       if (editItems.length === 0) {
         list.innerHTML = `<div class="edit-empty-order">No items — add from menu below</div>`;
         return;
       }
-
       list.innerHTML = editItems.map(item => `
         <div class="edit-order-item">
           <span class="eoi-name">${item.name}</span>
@@ -682,31 +778,21 @@
         </div>`).join('');
     }
 
-    /* ── Save edit ── */
     async function saveEdit() {
       if (!editItems.length) return;
       const btn = document.getElementById('btn-save');
       btn.disabled = true; btn.textContent = 'Saving…';
-
       const itemsStr = editItems.map(i => `${i.name} x${i.qty}`).join(', ');
       const total    = editItems.reduce((s, i) => s + i.price * i.qty, 0);
-
       try {
         const res = await fetch('/api/update-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ orderId: editingOrderId, items: itemsStr, total }),
         });
         if (!res.ok) throw new Error();
-
-        // Update local data
         const order = allOrders.find(o => String(o.orderId) === String(editingOrderId));
         if (order) { order.items = itemsStr; order.total = total; }
-
-        // Update the row in place
-        const row = document.getElementById(`row-${editingOrderId}`);
-        if (row) row.outerHTML = orderRow({ orderId: editingOrderId, dateTime: order.dateTime, items: itemsStr, total });
-
+        filterAndRender();
         closeEditModal();
         showToast(`✅ Order #${editingOrderId} updated in Google Sheets`);
       } catch {
@@ -716,73 +802,52 @@
       btn.textContent = 'Save Changes';
     }
 
-    /* ══════════════════════════════════
+    /* ══════════════════════════════════════════════
        DELETE
-    ══════════════════════════════════ */
+    ══════════════════════════════════════════════ */
     function openDelModal(orderId) {
       deletingOrderId = orderId;
       document.getElementById('del-modal-title').textContent = `Delete Order #${orderId}?`;
       document.getElementById('del-modal-bg').classList.add('open');
     }
-
     function closeDelModal() {
       document.getElementById('del-modal-bg').classList.remove('open');
       deletingOrderId = null;
     }
-
     async function confirmDelete() {
       const btn = document.getElementById('btn-del-confirm');
       btn.disabled = true; btn.textContent = 'Deleting…';
-      const row = document.getElementById(`row-${deletingOrderId}`);
-      if (row) row.classList.add('deleting');
-
       try {
         const res = await fetch('/api/delete-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ orderId: deletingOrderId }),
         });
         if (!res.ok) throw new Error();
-
         allOrders = allOrders.filter(o => String(o.orderId) !== String(deletingOrderId));
-        if (row) row.remove();
-
-        if (allOrders.length === 0) {
-          renderTable();
-        } else {
-          const revenue = allOrders.reduce((s, o) => s + Number(o.total || 0), 0);
-          document.getElementById('stat-count').textContent   = allOrders.length;
-          document.getElementById('stat-revenue').textContent = `₹${revenue}`;
-          document.getElementById('stat-avg').textContent     = `₹${Math.round(revenue / allOrders.length)}`;
-        }
-
+        filterAndRender();
         closeDelModal();
         showToast(`🗑️ Order #${deletingOrderId} deleted from Google Sheets`);
       } catch {
-        if (row) row.classList.remove('deleting');
         showToast('❌ Failed to delete. Try again.');
       }
       btn.disabled = false; btn.textContent = 'Delete';
     }
 
-    /* ── Close on backdrop click ── */
-    document.getElementById('edit-modal-bg').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeEditModal();
-    });
-    document.getElementById('del-modal-bg').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeDelModal();
-    });
+    /* ── Backdrop close ── */
+    document.getElementById('edit-modal-bg').addEventListener('click', e => { if (e.target===e.currentTarget) closeEditModal(); });
+    document.getElementById('del-modal-bg').addEventListener('click',  e => { if (e.target===e.currentTarget) closeDelModal(); });
 
     /* ── Toast ── */
     let toastTimer;
     function showToast(msg) {
       const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.classList.add('show');
+      el.textContent = msg; el.classList.add('show');
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
     }
 
+    /* ── Boot ── */
+    initDates();
     loadOrders();
   </script>
 </body>
