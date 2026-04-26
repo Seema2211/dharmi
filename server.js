@@ -14,51 +14,63 @@ const MIME = {
   '.json': 'application/json',
 };
 
-function shim(req, res, body, method) {
-  return {
-    method,
-    body,
+function makeRes(res) {
+  const fakeRes = {
     _status: 200,
-    status(code) { this._status = code; return this; },
-    setHeader(k, v) { res.setHeader(k, v); },
-    end() { res.end(); },
-    json(data) {
-      res.writeHead(this._status, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(data));
+    status(code)  { this._status = code; return this; },
+    setHeader(k, v) { if (!res.headersSent) res.setHeader(k, v); },
+    end()         { if (!res.headersSent) res.end(); },
+    json(data)    {
+      if (!res.headersSent) {
+        res.writeHead(this._status, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(data));
+      }
     },
   };
+  return fakeRes;
 }
 
 const server = http.createServer(async (req, res) => {
-  // POST /api/order
-  if (req.method === 'POST' && req.url === '/api/order') {
-    let body = '';
-    req.on('data', c => { body += c; });
-    req.on('end', async () => {
-      try {
-        const handler = require('./api/order');
-        await handler(shim(req, res, JSON.parse(body), 'POST'), shim(req, res, null, 'POST'));
-      } catch (err) {
+  // Route all /api/* requests to the matching handler file
+  if (req.url.startsWith('/api/')) {
+    const apiName = req.url.replace('/api/', '').split('?')[0];
+    const handlerPath = path.join(__dirname, 'api', `${apiName}.js`);
+
+    if (!fs.existsSync(handlerPath)) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'API not found' }));
+    }
+
+    // Parse body for POST/PUT
+    let body = {};
+    if (req.method === 'POST' || req.method === 'PUT') {
+      await new Promise(resolve => {
+        let raw = '';
+        req.on('data', c => { raw += c; });
+        req.on('end', () => {
+          try { body = JSON.parse(raw); } catch { body = {}; }
+          resolve();
+        });
+      });
+    }
+
+    try {
+      // Clear require cache so file changes reflect without restart
+      delete require.cache[require.resolve(handlerPath)];
+      const handler = require(handlerPath);
+      const fakeReq = { method: req.method, body, url: req.url };
+      await handler(fakeReq, makeRes(res));
+    } catch (err) {
+      console.error(`[${apiName}] Error:`, err.message);
+      if (!res.headersSent) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));
       }
-    });
-    return;
-  }
-
-  // GET /api/orders
-  if (req.method === 'GET' && req.url === '/api/orders') {
-    try {
-      const handler = require('./api/orders');
-      await handler(shim(req, res, null, 'GET'), shim(req, res, null, 'GET'));
-    } catch (err) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
     }
     return;
   }
 
-  // Static files
+  // Static files from public/
   const filePath = path.join(PUBLIC_DIR, req.url === '/' ? 'index.html' : req.url);
   const ext = path.extname(filePath);
 
@@ -71,11 +83,11 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   const hasEnv = process.env.GOOGLE_CLIENT_EMAIL;
-  console.log(`\n  🍦 Dharmi POS → http://localhost:${PORT}`);
-  console.log(`  📋 Orders page → http://localhost:${PORT}/orders.html`);
+  console.log(`\n  🍦 Dharmi POS    → http://localhost:${PORT}`);
+  console.log(`  📋 Orders page   → http://localhost:${PORT}/orders.html`);
   console.log(hasEnv
-    ? '  ✅ Google Sheets env vars detected — order saving is active.'
-    : '  ⚠️  No .env found — copy .env.example to .env and fill in your credentials.'
+    ? '  ✅ Google Sheets connected.'
+    : '  ⚠️  No .env — copy .env.example to .env and fill credentials.'
   );
   console.log('  Press Ctrl+C to stop.\n');
 });
