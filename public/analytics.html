@@ -328,12 +328,16 @@
     });
   }
 
-  // ── Parse "Name x2, Name x1" ─────────────────────────────────
+  // ── Parse items — handles both "Name xQ" and "Cat: Name xQ" ──
   function parseItems(str) {
     if (!str) return [];
     return str.split(',').map(s => {
-      const m = s.trim().match(/^(.+?)\s+x(\d+)$/i);
-      return m ? { name: m[1].trim(), qty: parseInt(m[2]) } : null;
+      s = s.trim();
+      const newFmt = s.match(/^([^:]+):\s*(.+?)\s+x(\d+)$/i);
+      const oldFmt = s.match(/^(.+?)\s+x(\d+)$/i);
+      if (newFmt) return { category: newFmt[1].trim(), name: newFmt[2].trim(), qty: parseInt(newFmt[3]) };
+      if (oldFmt) return { name: oldFmt[1].trim(), qty: parseInt(oldFmt[2]), category: null };
+      return null;
     }).filter(Boolean);
   }
 

@@ -57,7 +57,7 @@ function addItem(id) {
   const mi = menu.find(i => i.id === id);
   const ex = order.find(o => o.id === id);
   if (ex) { ex.qty++; }
-  else     { order.push({ id: mi.id, name: mi.name, price: mi.price, qty: 1 }); }
+  else     { order.push({ id: mi.id, name: mi.name, price: mi.price, category: mi.category, qty: 1 }); }
 
   const card = document.getElementById(`card-${id}`);
   if (card) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); }

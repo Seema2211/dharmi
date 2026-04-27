@@ -54,7 +54,7 @@ module.exports = async function handler(req, res) {
   }
 
   const total = items.reduce((sum, i) => sum + Number(i.price) * Number(i.qty), 0);
-  const itemsStr = items.map(i => `${i.name} x${i.qty}`).join(', ');
+  const itemsStr = items.map(i => `${i.category}: ${i.name} x${i.qty}`).join(', ');
   const dateTime = new Date().toLocaleString('en-IN', {
     timeZone: 'Asia/Kolkata',
     day: '2-digit', month: '2-digit', year: 'numeric',

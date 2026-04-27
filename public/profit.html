@@ -368,32 +368,35 @@
     }
   }
 
-  // ── Build lookup: name (lowercase) → { sellPrice, purchasePrice, category }
-  // For duplicate names across categories, average the purchase price
+  // ── Build lookup — keyed by "category:name" (exact) + "name" (fallback) ──
   function buildPriceLookup() {
     const map = {};
     menuData.forEach(item => {
-      const key = item.name.toLowerCase();
-      if (map[key]) {
-        map[key].purchasePrice = (map[key].purchasePrice + item.purchasePrice) / 2;
-        map[key].sellPrice     = (map[key].sellPrice + item.price) / 2;
+      // Exact key: "kulfi:kaju anjir"
+      const exact = `${item.category.toLowerCase()}:${item.name.toLowerCase()}`;
+      map[exact] = { sellPrice: item.price, purchasePrice: item.purchasePrice, category: item.category };
+      // Name-only fallback (average if duplicate name exists across categories)
+      const nameKey = item.name.toLowerCase();
+      if (map[nameKey]) {
+        map[nameKey].purchasePrice = (map[nameKey].purchasePrice + item.purchasePrice) / 2;
+        map[nameKey].sellPrice     = (map[nameKey].sellPrice + item.price) / 2;
       } else {
-        map[key] = {
-          sellPrice:     item.price,
-          purchasePrice: item.purchasePrice,
-          category:      item.category,
-        };
+        map[nameKey] = { sellPrice: item.price, purchasePrice: item.purchasePrice, category: item.category };
       }
     });
     return map;
   }
 
-  // ── Parse "Name x2, Name x1" ─────────────────────────────────
+  // ── Parse items — handles both "Name xQ" and "Cat: Name xQ" ──
   function parseItems(str) {
     if (!str) return [];
     return str.split(',').map(s => {
-      const m = s.trim().match(/^(.+?)\s+x(\d+)$/i);
-      return m ? { name: m[1].trim(), qty: parseInt(m[2]) } : null;
+      s = s.trim();
+      const newFmt = s.match(/^([^:]+):\s*(.+?)\s+x(\d+)$/i);
+      const oldFmt = s.match(/^(.+?)\s+x(\d+)$/i);
+      if (newFmt) return { category: newFmt[1].trim(), name: newFmt[2].trim(), qty: parseInt(newFmt[3]) };
+      if (oldFmt) return { name: oldFmt[1].trim(), qty: parseInt(oldFmt[2]), category: null };
+      return null;
     }).filter(Boolean);
   }
 
@@ -425,11 +428,12 @@
       const day = dayLabel(order.dateTime) || 'Unknown';
       if (!byDay[day]) byDay[day] = { revenue: 0, cost: 0 };
 
-      parseItems(order.items).forEach(({ name, qty }) => {
-        const info = lookup[name.toLowerCase()];
+      parseItems(order.items).forEach(({ name, qty, category }) => {
+        const exactKey = category ? `${category.toLowerCase()}:${name.toLowerCase()}` : null;
+        const info = (exactKey && lookup[exactKey]) || lookup[name.toLowerCase()];
         const sell = info ? info.sellPrice     : (Number(order.total) / Math.max(parseItems(order.items).reduce((s,i)=>s+i.qty,0),1));
         const buy  = info ? info.purchasePrice : sell * 0.5;
-        const cat  = info ? info.category      : 'Other';
+        const cat  = category || (info ? info.category : 'Other');
 
         const rev  = sell * qty;
         const cost = buy  * qty;

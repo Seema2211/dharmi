@@ -690,13 +690,25 @@
 
     function parseOrderString(str) {
       return str.split(',').map(part => {
-        const m = part.trim().match(/^(.+?)\s+x(\d+)$/i);
-        if (!m) return null;
-        const name = m[1].trim();
-        const qty  = parseInt(m[2]);
-        const mi   = menuData.find(i => i.name.toLowerCase() === name.toLowerCase());
-        return mi ? { id: mi.id, name: mi.name, price: mi.price, qty }
-                  : { id: `c${Date.now()}`, name, price: 0, qty };
+        part = part.trim();
+        // New format: "Category: Name xQty"
+        const newFmt = part.match(/^([^:]+):\s*(.+?)\s+x(\d+)$/i);
+        // Old format: "Name xQty"
+        const oldFmt = part.match(/^(.+?)\s+x(\d+)$/i);
+        if (!newFmt && !oldFmt) return null;
+
+        const name     = newFmt ? newFmt[2].trim() : oldFmt[1].trim();
+        const category = newFmt ? newFmt[1].trim() : null;
+        const qty      = parseInt(newFmt ? newFmt[3] : oldFmt[2]);
+
+        // Exact match (category + name) first, then name-only fallback
+        const mi = category
+          ? menuData.find(i => i.name.toLowerCase() === name.toLowerCase() && i.category.toLowerCase() === category.toLowerCase())
+            || menuData.find(i => i.name.toLowerCase() === name.toLowerCase())
+          : menuData.find(i => i.name.toLowerCase() === name.toLowerCase());
+
+        return mi ? { id: mi.id, name: mi.name, price: mi.price, category: mi.category, qty }
+                  : { id: `c${Date.now()}`, name, price: 0, category: category || '', qty };
       }).filter(Boolean);
     }
 
