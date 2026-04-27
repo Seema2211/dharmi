@@ -18,20 +18,6 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // ── Load character images ─────────────────────────────────────
-  // Place your DS character PNG files in public/images/:
-  //   char-left.png  (e.g. Tanjiro)
-  //   char-right.png (e.g. Nezuko / Rengoku)
-  const charImgs = { left: null, right: null };
-  function loadImg(key, src) {
-    const img = new Image();
-    img.onload = () => { charImgs[key] = img; };
-    img.onerror = () => {};
-    img.src = src;
-  }
-  loadImg('left',  '/images/char-left.png');
-  loadImg('right', '/images/char-right.png');
-
   // ── Background ───────────────────────────────────────────────
   function drawBg() {
     const g = ctx.createLinearGradient(0, 0, W * 0.6, H);
@@ -49,17 +35,13 @@
     glow.addColorStop(0, 'rgba(200,230,255,0.12)');
     glow.addColorStop(1, 'transparent');
     ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(mx, my, mr * 3.5, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(mx, my, mr * 3.5, 0, Math.PI * 2); ctx.fill();
     const moon = ctx.createRadialGradient(mx - 8, my - 8, 4, mx, my, mr);
     moon.addColorStop(0,   '#fdf8e8');
     moon.addColorStop(0.6, '#ece8d0');
     moon.addColorStop(1,   '#ccc8b0');
     ctx.fillStyle = moon;
-    ctx.beginPath();
-    ctx.arc(mx, my, mr, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(mx, my, mr, 0, Math.PI * 2); ctx.fill();
   }
 
   // ── Stars ────────────────────────────────────────────────────
@@ -74,158 +56,11 @@
       s.a += s.da;
       if (s.a > 0.75 || s.a < 0.05) s.da *= -1;
       ctx.save();
-      ctx.globalAlpha = s.a;
-      ctx.fillStyle = '#cce8ff';
+      ctx.globalAlpha = s.a; ctx.fillStyle = '#cce8ff';
       ctx.shadowColor = '#88ccff'; ctx.shadowBlur = 3;
-      ctx.beginPath();
-      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
     });
-  }
-
-  // ── Character: draw image with glow (desktop/tablet only) ───────
-  function drawCharImage(img, side) {
-    if (!img || !img.complete || img.naturalWidth === 0) return false;
-    if (W < 700) return true; // hide on mobile — particles are enough
-
-    // Cap height to 65% of screen, never taller than 480px,
-    // and never wider than 28% of viewport (keeps both chars off-centre)
-    const maxH = Math.min(H * 0.65, 480);
-    const scale = maxH / img.naturalHeight;
-    const rawW  = img.naturalWidth * scale;
-    const w     = Math.min(rawW, W * 0.28);
-    const h     = w / (img.naturalWidth / img.naturalHeight); // keep aspect ratio
-
-    // Push images well into the edges so they never overlap content
-    const x = side === 'left' ? -w * 0.38 : W - w * 0.62;
-    const y = H - h;
-    const glowColor = side === 'left' ? '#00d4aa' : '#ff6b35';
-
-    ctx.save();
-
-    // Atmospheric aura
-    const aura = ctx.createRadialGradient(
-      x + w * 0.5, y + h * 0.6, 0,
-      x + w * 0.5, y + h * 0.6, w * 0.75
-    );
-    aura.addColorStop(0, side === 'left' ? 'rgba(0,212,170,0.09)' : 'rgba(255,107,53,0.07)');
-    aura.addColorStop(1, 'transparent');
-    ctx.fillStyle = aura;
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.5, y + h * 0.65, w * 0.75, h * 0.65, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Ground glow
-    const grdG = ctx.createRadialGradient(x + w * 0.5, H, 0, x + w * 0.5, H, w * 0.6);
-    grdG.addColorStop(0, side === 'left' ? 'rgba(0,212,170,0.12)' : 'rgba(255,107,53,0.10)');
-    grdG.addColorStop(1, 'transparent');
-    ctx.fillStyle = grdG;
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.5, H, w * 0.6, H * 0.055, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Soft glow passes
-    ctx.shadowColor = glowColor;
-    ctx.shadowBlur  = 40; ctx.globalAlpha = 0.10; ctx.drawImage(img, x, y, w, h);
-    ctx.shadowBlur  = 22; ctx.globalAlpha = 0.14; ctx.drawImage(img, x, y, w, h);
-
-    // Main draw — 0.38 opacity keeps UI readable
-    ctx.shadowBlur  = 8;  ctx.globalAlpha = 0.38; ctx.drawImage(img, x, y, w, h);
-    ctx.restore();
-    return true;
-  }
-
-  // ── Fallback silhouette (when no image) ───────────────────────
-  function drawSilhouette(cx, floorY, size, color, mirror) {
-    const S = size;
-    ctx.save();
-    if (mirror) { ctx.translate(W, 0); ctx.scale(-1, 1); cx = W - cx; }
-    ctx.fillStyle   = color;
-    ctx.strokeStyle = color;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    // Aura
-    const aura = ctx.createRadialGradient(cx, floorY - S*0.5, 0, cx, floorY - S*0.5, S*0.65);
-    aura.addColorStop(0, color.replace(/[\d.]+\)$/, '0.07)'));
-    aura.addColorStop(1, 'transparent');
-    ctx.fillStyle = aura;
-    ctx.beginPath();
-    ctx.ellipse(cx, floorY - S*0.5, S*0.55, S*0.65, 0, 0, Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle = color;
-
-    // Head
-    ctx.beginPath();
-    ctx.arc(cx, floorY - S*0.88, S*0.09, 0, Math.PI*2);
-    ctx.fill();
-
-    // Hair spikes
-    ctx.beginPath();
-    ctx.moveTo(cx - S*0.09, floorY - S*0.94);
-    ctx.lineTo(cx - S*0.18, floorY - S*1.08);
-    ctx.lineTo(cx - S*0.06, floorY - S*1.03);
-    ctx.lineTo(cx + S*0.01, floorY - S*1.14);
-    ctx.lineTo(cx + S*0.07, floorY - S*1.03);
-    ctx.lineTo(cx + S*0.16, floorY - S*1.06);
-    ctx.lineTo(cx + S*0.09, floorY - S*0.93);
-    ctx.closePath();
-    ctx.fill();
-
-    // Torso
-    ctx.beginPath();
-    ctx.moveTo(cx - S*0.11, floorY - S*0.79);
-    ctx.lineTo(cx - S*0.13, floorY - S*0.44);
-    ctx.lineTo(cx + S*0.13, floorY - S*0.44);
-    ctx.lineTo(cx + S*0.11, floorY - S*0.79);
-    ctx.closePath();
-    ctx.fill();
-
-    // Left arm
-    ctx.lineWidth = S*0.057;
-    ctx.beginPath();
-    ctx.moveTo(cx - S*0.11, floorY - S*0.76);
-    ctx.quadraticCurveTo(cx - S*0.27, floorY - S*0.62, cx - S*0.24, floorY - S*0.46);
-    ctx.stroke();
-
-    // Right arm (raised)
-    ctx.beginPath();
-    ctx.moveTo(cx + S*0.11, floorY - S*0.76);
-    ctx.quadraticCurveTo(cx + S*0.30, floorY - S*0.74, cx + S*0.28, floorY - S*0.60);
-    ctx.stroke();
-
-    // Legs
-    ctx.beginPath();
-    ctx.moveTo(cx - S*0.05, floorY - S*0.44);
-    ctx.lineTo(cx - S*0.08, floorY - S*0.08);
-    ctx.lineTo(cx - S*0.16, floorY);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(cx + S*0.05, floorY - S*0.44);
-    ctx.lineTo(cx + S*0.07, floorY - S*0.10);
-    ctx.lineTo(cx + S*0.16, floorY);
-    ctx.stroke();
-
-    // Sword glow + blade
-    const sColor = color.replace(/[\d.]+\)$/, '0.35)');
-    ctx.shadowColor = sColor; ctx.shadowBlur = 14;
-    ctx.strokeStyle = sColor;
-    ctx.lineWidth = S*0.016;
-    ctx.beginPath();
-    ctx.moveTo(cx + S*0.28, floorY - S*0.60);
-    ctx.lineTo(cx + S*0.60, floorY - S*0.94);
-    ctx.stroke();
-    // Shine
-    ctx.strokeStyle = 'rgba(255,255,255,0.45)';
-    ctx.lineWidth = S*0.005; ctx.shadowBlur = 6;
-    ctx.beginPath();
-    ctx.moveTo(cx + S*0.29, floorY - S*0.61);
-    ctx.lineTo(cx + S*0.59, floorY - S*0.93);
-    ctx.stroke();
-
-    ctx.restore();
   }
 
   // ── Water streaks ─────────────────────────────────────────────
@@ -253,8 +88,7 @@
       e.x += e.vx + Math.sin(t*0.0009+e.i)*0.25;
       e.y += e.vy; e.a -= 0.0018;
       if (e.y < -5 || e.a <= 0) embers[idx] = mkEmber();
-      ctx.save();
-      ctx.globalAlpha = e.a;
+      ctx.save(); ctx.globalAlpha=e.a;
       const c = `hsl(${e.hue},100%,65%)`;
       ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=e.r*5;
       ctx.beginPath(); ctx.arc(e.x,e.y,e.r,0,Math.PI*2); ctx.fill();
@@ -300,16 +134,6 @@
     drawBg();
     drawMoon();
     drawStars();
-
-    // Characters — desktop/tablet only (hidden on mobile < 700px)
-    if (W >= 700) {
-      const S = H * 0.52;
-      if (!drawCharImage(charImgs.left,  'left'))
-        drawSilhouette(S * 0.50, H, S, 'rgba(0,212,170,0.13)', false);
-      if (!drawCharImage(charImgs.right, 'right'))
-        drawSilhouette(W - S * 0.50, H, S * 0.90, 'rgba(255,107,53,0.11)', true);
-    }
-
     drawStreaks();
     drawSparkles();
     drawEmbers(t);
