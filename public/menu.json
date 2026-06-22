@@ -27,5 +27,29 @@
 
   { "id": 25, "name": "Plain Lassi",    "price": 45, "purchasePrice": 25.00, "category": "Lassi" },
   { "id": 26, "name": "Pista Lassi",    "price": 55, "purchasePrice": 27.00, "category": "Lassi" },
-  { "id": 27, "name": "Mango Lassi",    "price": 60, "purchasePrice": 30.00, "category": "Lassi" }
+  { "id": 27, "name": "Mango Lassi",    "price": 60, "purchasePrice": 30.00, "category": "Lassi" },
+
+  { "id": 28, "name": "Dharmi Special 500g",  "price": 200, "purchasePrice": 136, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 29, "name": "Rajbhog 500g",         "price": 180, "purchasePrice": 125, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 30, "name": "Khajur Nariyal 500g",  "price": 170, "purchasePrice": 123, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 31, "name": "Gotalo 500g",          "price": 170, "purchasePrice": 114, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 32, "name": "Kaju Gulkand 500g",    "price": 170, "purchasePrice": 129, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 33, "name": "Kaju Draksh 500g",     "price": 160, "purchasePrice": 123, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 34, "name": "Sitafal 500g",         "price": 160, "purchasePrice": 123, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 35, "name": "Jamun 500g",           "price": 160, "purchasePrice": 118, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 36, "name": "Strawberry 500g",      "price": 160, "purchasePrice": 113, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 37, "name": "Chocolate 500g",       "price": 160, "purchasePrice": 120, "category": "Family Pack", "subcategory": "500g" },
+  { "id": 38, "name": "Mava Malai 500g",      "price": 150, "purchasePrice":  89, "category": "Family Pack", "subcategory": "500g" },
+
+  { "id": 39, "name": "Dharmi Special 1kg",   "price": 390, "purchasePrice": 269, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 40, "name": "Rajbhog 1kg",          "price": 350, "purchasePrice": 245, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 41, "name": "Khajur Nariyal 1kg",   "price": 330, "purchasePrice": 241, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 42, "name": "Gotalo 1kg",           "price": 330, "purchasePrice": 221, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 43, "name": "Kaju Gulkand 1kg",     "price": 330, "purchasePrice": 251, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 44, "name": "Kaju Draksh 1kg",      "price": 320, "purchasePrice": 240, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 45, "name": "Sitafal 1kg",          "price": 320, "purchasePrice": 240, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 46, "name": "Jamun 1kg",            "price": 320, "purchasePrice": 237, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 47, "name": "Strawberry 1kg",       "price": 320, "purchasePrice": 221, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 48, "name": "Chocolate 1kg",        "price": 320, "purchasePrice": 234, "category": "Family Pack", "subcategory": "1kg" },
+  { "id": 49, "name": "Mava Malai 1kg",       "price": 290, "purchasePrice": 168, "category": "Family Pack", "subcategory": "1kg" }
 ]

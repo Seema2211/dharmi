@@ -157,6 +157,44 @@ body {
   box-shadow: var(--shadow-btn);
 }
 
+/* Sub-category Tabs */
+.subcategories {
+  display: flex;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(4, 6, 18, 0.65);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.subcategories::-webkit-scrollbar { display: none; }
+
+.subcat-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 16px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-2);
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.subcat-btn:hover { border-color: var(--pink); color: var(--pink); }
+.subcat-btn.active {
+  background: rgba(0, 212, 170, 0.14);
+  border-color: var(--pink);
+  color: var(--pink);
+  box-shadow: 0 0 10px rgba(0, 212, 170, 0.18);
+}
+
 /* Items Grid */
 .items-grid {
   display: grid;
