@@ -13,8 +13,8 @@
   { "id": 12, "name": "Mava Gulakand",  "nameGu": "માવા ગુલકંદ",      "price": 35, "purchasePrice": 19.16, "category": "Kulfi" },
   { "id": 13, "name": "Mava Mango",     "nameGu": "માવા કેરી",        "price": 30, "purchasePrice": 15.60, "category": "Kulfi" },
   { "id": 14, "name": "Mava Malai",     "nameGu": "માવા મલાઈ",        "price": 30, "purchasePrice": 15.60, "category": "Kulfi" },
-  { "id": 51, "name": "American Dry Fruit", "nameGu": "અમેરિકન સૂકો મેવો", "price": 60, "purchasePrice": 60, "category": "Kulfi" },
-  { "id": 52, "name": "Kunafa",         "nameGu": "કુનાફા",           "price": 60, "purchasePrice": 60, "category": "Kulfi" },
+  { "id": 51, "name": "American Dry Fruit", "nameGu": "અમેરિકન સૂકો મેવો", "price": 60, "purchasePrice": 35, "category": "Kulfi" },
+  { "id": 52, "name": "Kunafa",         "nameGu": "કુનાફા",           "price": 60, "purchasePrice": 36, "category": "Kulfi" },
 
   { "id": 15, "name": "Dharmi Special", "nameGu": "ધર્મી સ્પેશિયલ",    "price": 55, "purchasePrice": 23.63, "category": "Ice Cream" },
   { "id": 16, "name": "Rajbhog",        "nameGu": "રાજભોગ",          "price": 50, "purchasePrice": 21.36, "category": "Ice Cream" },
@@ -26,7 +26,7 @@
   { "id": 22, "name": "Jamun",          "nameGu": "જાંબુ",            "price": 40, "purchasePrice": 20.90, "category": "Ice Cream" },
   { "id": 23, "name": "Strawberry",     "nameGu": "સ્ટ્રોબેરી",        "price": 40, "purchasePrice": 20.90, "category": "Ice Cream" },
   { "id": 24, "name": "Mava Malai",     "nameGu": "માવા મલાઈ",        "price": 35, "purchasePrice": 14.54, "category": "Ice Cream" },
-  { "id": 50, "name": "Chocolate Ice Cream", "nameGu": "ચોકલેટ આઈસ્ક્રીમ", "price": 40, "purchasePrice": 40, "category": "Ice Cream" },
+  { "id": 50, "name": "Chocolate Ice Cream", "nameGu": "ચોકલેટ આઈસ્ક્રીમ", "price": 40, "purchasePrice": 22.5, "category": "Ice Cream" },
 
   { "id": 25, "name": "Plain Lassi",    "nameGu": "સાદી લસ્સી",       "price": 45, "purchasePrice": 25.00, "category": "Lassi" },
   { "id": 26, "name": "Pista Lassi",    "nameGu": "પિસ્તા લસ્સી",      "price": 55, "purchasePrice": 27.00, "category": "Lassi" },
