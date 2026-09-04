@@ -1,11 +1,32 @@
 const CAT_META = {
-  'Kulfi':       { emoji: '🍧' },
-  'Ice Cream':   { emoji: '🍦' },
-  'Lassi':       { emoji: '🥛' },
-  'Family Pack': { emoji: '🧊' },
+  'Kulfi':       { emoji: '🍧', en: 'Kulfi',       gu: 'કુલ્ફી' },
+  'Ice Cream':   { emoji: '🍦', en: 'Ice Cream',   gu: 'આઈસ્ક્રીમ' },
+  'Lassi':       { emoji: '🥛', en: 'Lassi',       gu: 'લસ્સી' },
+  'Family Pack': { emoji: '🧊', en: 'Family Pack', gu: 'કુટુંબ પેક' },
 };
 
+const SUBCAT_LABELS = {
+  '500g': { en: '500g', gu: '500 ગ્રામ' },
+  '1kg':  { en: '1kg',  gu: '1 કિલો' },
+};
+
+function catLabel(cat) {
+  const meta = CAT_META[cat];
+  return meta ? (currentLang === 'gu' ? meta.gu : meta.en) : cat;
+}
+
+function subcatLabel(sc) {
+  const l = SUBCAT_LABELS[sc];
+  return l ? (currentLang === 'gu' ? l.gu : l.en) : sc;
+}
+
+function itemName(mi) {
+  if (currentLang === 'gu') return mi.nameGu || mi.name;
+  return mi.subcategory ? mi.name.replace(` ${mi.subcategory}`, '') : mi.name;
+}
+
 let menu              = [];
+let categoriesList    = [];
 let order             = [];
 let activeCategory    = '';
 let activeSubcategory = '';
@@ -14,11 +35,18 @@ fetch('menu.json')
   .then(r => r.json())
   .then(data => {
     menu = data;
-    const categories = [...new Set(data.map(i => i.category))];
-    activeCategory = categories[0];
-    renderCategories(categories);
+    categoriesList = [...new Set(data.map(i => i.category))];
+    activeCategory = categoriesList[0];
+    renderCategories(categoriesList);
     renderItems();
   });
+
+function onLangChange() {
+  if (!menu.length) return;
+  renderCategories(categoriesList);
+  renderItems();
+  renderOrder();
+}
 
 /* ── Categories ── */
 function renderCategories(categories) {
@@ -26,7 +54,7 @@ function renderCategories(categories) {
     const meta = CAT_META[cat] || { emoji: '🍽️' };
     return `<button class="cat-btn ${cat === activeCategory ? 'active' : ''}"
       data-cat="${cat}" onclick="setCategory('${cat}')">
-      <span class="cat-emoji">${meta.emoji}</span>${cat}
+      <span class="cat-emoji">${meta.emoji}</span>${catLabel(cat)}
     </button>`;
   }).join('');
 }
@@ -58,7 +86,7 @@ function renderItems() {
     }
     subEl.innerHTML = subcats.map(sc =>
       `<button class="subcat-btn ${sc === activeSubcategory ? 'active' : ''}"
-        data-sc="${sc}" onclick="setSubcategory('${sc}')">${sc}</button>`
+        data-sc="${sc}" onclick="setSubcategory('${sc}')">${subcatLabel(sc)}</button>`
     ).join('');
     subEl.style.display = '';
   } else {
@@ -73,11 +101,8 @@ function renderItems() {
 
   document.getElementById('items-grid').innerHTML = displayItems
     .map(item => {
-      const displayName = item.subcategory
-        ? item.name.replace(` ${item.subcategory}`, '')
-        : item.name;
       return `<div class="item-card" id="card-${item.id}" onclick="addItem(${item.id})">
-        <div class="item-name">${displayName}</div>
+        <div class="item-name">${itemName(item)}</div>
         <div class="item-foot">
           <span class="item-price">₹${item.price}</span>
           <span class="item-plus">+</span>
@@ -91,7 +116,10 @@ function addItem(id) {
   const mi = menu.find(i => i.id === id);
   const ex = order.find(o => o.id === id);
   if (ex) { ex.qty++; }
-  else     { order.push({ id: mi.id, name: mi.name, price: mi.price, category: mi.category, qty: 1 }); }
+  else     {
+    const nameEn = mi.subcategory ? mi.name.replace(` ${mi.subcategory}`, '') : mi.name;
+    order.push({ id: mi.id, name: nameEn, nameGu: mi.nameGu || nameEn, price: mi.price, category: mi.category, qty: 1 });
+  }
 
   const card = document.getElementById(`card-${id}`);
   if (card) { card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop'); }
@@ -138,14 +166,14 @@ function renderOrder() {
     list.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">🍧</div>
-        <div class="empty-msg">Tap items to add<br/>to your order</div>
+        <div class="empty-msg">${t('emptyMsg')}</div>
       </div>`;
     return;
   }
 
   list.innerHTML = order.map(item =>
     `<div class="order-item">
-      <span class="oi-name">${item.name}</span>
+      <span class="oi-name">${currentLang === 'gu' ? item.nameGu : item.name}</span>
       <div class="qty-ctrl">
         <button class="qty-btn" onclick="updateQty(${item.id},-1)">&#8722;</button>
         <span class="qty-num">${item.qty}</span>
@@ -169,7 +197,7 @@ function updateCartBar(qty, total) {
   // Only show on mobile (CSS controls display, but force show here)
   bar.style.display = '';
   document.getElementById('cart-bar-count').textContent =
-    `${qty} item${qty > 1 ? 's' : ''}`;
+    `${qty} ${qty > 1 ? t('itemsWord') : t('itemWord')}`;
   document.getElementById('cart-bar-total').textContent = `₹${total}`;
 }
 
@@ -192,7 +220,7 @@ async function placeOrder() {
 
   const btn = document.getElementById('btn-place');
   btn.disabled = true;
-  btn.textContent = 'Placing…';
+  btn.textContent = t('placing');
 
   try {
     const res = await fetch('/api/order', {
@@ -203,13 +231,13 @@ async function placeOrder() {
     if (!res.ok) throw new Error();
     const data = await res.json();
     clearOrder();
-    showToast(`✅ Order #${data.orderId} placed!`);
+    showToast(currentLang === 'gu' ? `✅ ઓર્ડર #${data.orderId} નોંધાયો!` : `✅ Order #${data.orderId} placed!`);
   } catch {
-    showToast('❌ Failed to place order. Try again.');
+    showToast(currentLang === 'gu' ? '❌ ઓર્ડર આપવામાં નિષ્ફળ. ફરી પ્રયત્ન કરો.' : '❌ Failed to place order. Try again.');
     btn.disabled = false;
   }
 
-  btn.textContent = 'Place Order';
+  btn.textContent = t('placeOrder');
 }
 
 /* ── Toast ── */

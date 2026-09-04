@@ -93,6 +93,30 @@ body {
 }
 .orders-link:hover { background: rgba(255,255,255,0.35); }
 
+/* Language toggle */
+.lang-switch {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.lang-btn {
+  border: 1.5px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.15);
+  color: white;
+  padding: 6px 11px;
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lang-btn.active {
+  background: white;
+  color: var(--pink-dark);
+  border-color: white;
+}
+
 /* ════════════════════════════════
    APP LAYOUT
 ════════════════════════════════ */
@@ -571,6 +595,7 @@ body {
 
   .header-sub { display: none; }
   .header-title { font-size: 0.95rem; }
+  .header { flex-wrap: wrap; row-gap: 8px; }
 
   /* Order panel → bottom sheet */
   .order-panel {

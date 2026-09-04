@@ -15,11 +15,15 @@
     <span class="header-icon">🍦</span>
     <div class="header-text">
       <div class="header-title">Dharmi Ice Cream &amp; Kulfi</div>
-      <div class="header-sub">Fresh &amp; Delicious Every Day</div>
+      <div class="header-sub" data-i18n="tagline">Fresh &amp; Delicious Every Day</div>
     </div>
-    <a class="orders-link" href="/orders.html">📋 Orders</a>
-    <a class="orders-link" href="/analytics.html">📊 Analytics</a>
-    <a class="orders-link" href="/profit.html">💰 Profit</a>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="gu" onclick="setLang('gu')">ગુ</button>
+    </div>
+    <a class="orders-link" href="/orders.html">📋 <span data-i18n="ordersLink">Orders</span></a>
+    <a class="orders-link" href="/analytics.html">📊 <span data-i18n="analyticsLink">Analytics</span></a>
+    <a class="orders-link" href="/profit.html">💰 <span data-i18n="profitLink">Profit</span></a>
   </header>
 
   <div class="app">
@@ -37,29 +41,29 @@
       <div class="sheet-handle"></div>
 
       <div class="order-head">
-        <span class="order-title">🛒 Current Order</span>
+        <span class="order-title">🛒 <span data-i18n="currentOrder">Current Order</span></span>
         <div class="order-head-actions">
           <span class="order-badge" id="order-badge"></span>
-          <button class="close-btn" onclick="closeSheet()" aria-label="Close">✕</button>
+          <button class="close-btn" onclick="closeSheet()" data-i18n-aria="close" aria-label="Close">✕</button>
         </div>
       </div>
 
       <div class="order-list" id="order-list">
         <div class="empty-state">
           <div class="empty-icon">🍧</div>
-          <div class="empty-msg">Tap items to add<br/>to your order</div>
+          <div class="empty-msg" data-i18n-html="emptyMsg">Tap items to add<br/>to your order</div>
         </div>
       </div>
 
       <div class="order-foot">
         <div class="total-row">
-          <span class="total-label">Total Amount</span>
+          <span class="total-label" data-i18n="totalAmount">Total Amount</span>
           <span class="total-val" id="total-val">₹0</span>
         </div>
-        <button class="btn-place" id="btn-place" onclick="placeOrder()" disabled>
+        <button class="btn-place" id="btn-place" data-i18n="placeOrder" onclick="placeOrder()" disabled>
           Place Order
         </button>
-        <button class="btn-clear" onclick="clearOrder()">Clear Order</button>
+        <button class="btn-clear" data-i18n="clearOrder" onclick="clearOrder()">Clear Order</button>
       </div>
 
     </div>
@@ -75,11 +79,12 @@
     </div>
     <div class="cart-bar-right">
       <strong id="cart-bar-total">₹0</strong>
-      <span class="cart-bar-cta">View Order ›</span>
+      <span class="cart-bar-cta" data-i18n="viewOrder">View Order ›</span>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
