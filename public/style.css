@@ -80,6 +80,13 @@ body {
   margin-top: 1px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .orders-link {
   background: rgba(255,255,255,0.22);
   color: white;
@@ -273,10 +280,7 @@ body {
 .item-price {
   font-size: 0.9rem;
   font-weight: 800;
-  background: var(--grad);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--pink);
 }
 
 .item-plus {
@@ -440,10 +444,7 @@ body {
 .total-val {
   font-size: 1.4rem;
   font-weight: 800;
-  background: var(--grad);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--pink);
 }
 
 .btn-place {
@@ -596,6 +597,14 @@ body {
   .header-sub { display: none; }
   .header-title { font-size: 0.95rem; }
   .header { flex-wrap: wrap; row-gap: 8px; }
+  .header-actions {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .orders-link span { display: none; }
+  .orders-link { padding: 7px 10px; }
 
   /* Order panel → bottom sheet */
   .order-panel {
