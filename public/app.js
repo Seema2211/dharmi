@@ -1,12 +1,14 @@
 const CAT_META = {
-  'Kulfi':     { emoji: '🍧' },
-  'Ice Cream': { emoji: '🍦' },
-  'Lassi':     { emoji: '🥛' },
+  'Kulfi':       { emoji: '🍧' },
+  'Ice Cream':   { emoji: '🍦' },
+  'Lassi':       { emoji: '🥛' },
+  'Family Pack': { emoji: '🧊' },
 };
 
-let menu     = [];
-let order    = [];
-let activeCategory = '';
+let menu              = [];
+let order             = [];
+let activeCategory    = '';
+let activeSubcategory = '';
 
 fetch('menu.json')
   .then(r => r.json())
@@ -30,26 +32,58 @@ function renderCategories(categories) {
 }
 
 function setCategory(cat) {
-  activeCategory = cat;
+  activeCategory    = cat;
+  activeSubcategory = '';
   document.querySelectorAll('.cat-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.cat === cat)
   );
   renderItems();
 }
 
+/* ── Sub-categories ── */
+function setSubcategory(sc) {
+  activeSubcategory = sc;
+  renderItems();
+}
+
 /* ── Items ── */
 function renderItems() {
-  document.getElementById('items-grid').innerHTML = menu
-    .filter(i => i.category === activeCategory)
-    .map(item =>
-      `<div class="item-card" id="card-${item.id}" onclick="addItem(${item.id})">
-        <div class="item-name">${item.name}</div>
+  const catItems = menu.filter(i => i.category === activeCategory);
+  const subcats  = [...new Set(catItems.filter(i => i.subcategory).map(i => i.subcategory))];
+  const subEl    = document.getElementById('subcategories');
+
+  if (subcats.length) {
+    if (!activeSubcategory || !subcats.includes(activeSubcategory)) {
+      activeSubcategory = subcats[0];
+    }
+    subEl.innerHTML = subcats.map(sc =>
+      `<button class="subcat-btn ${sc === activeSubcategory ? 'active' : ''}"
+        data-sc="${sc}" onclick="setSubcategory('${sc}')">${sc}</button>`
+    ).join('');
+    subEl.style.display = '';
+  } else {
+    activeSubcategory = '';
+    subEl.innerHTML   = '';
+    subEl.style.display = 'none';
+  }
+
+  const displayItems = subcats.length
+    ? catItems.filter(i => i.subcategory === activeSubcategory)
+    : catItems;
+
+  document.getElementById('items-grid').innerHTML = displayItems
+    .map(item => {
+      const displayName = item.subcategory
+        ? item.name.replace(` ${item.subcategory}`, '')
+        : item.name;
+      return `<div class="item-card" id="card-${item.id}" onclick="addItem(${item.id})">
+        <div class="item-name">${displayName}</div>
         <div class="item-foot">
           <span class="item-price">₹${item.price}</span>
           <span class="item-plus">+</span>
         </div>
-      </div>`
-    ).join('');
+      </div>`;
+    }).join('');
 }
 
 /* ── Order Logic ── */
