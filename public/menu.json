@@ -13,8 +13,8 @@
   { "id": 12, "name": "Mava Gulakand",  "price": 35, "purchasePrice": 19.16, "category": "Kulfi" },
   { "id": 13, "name": "Mava Mango",     "price": 30, "purchasePrice": 15.60, "category": "Kulfi" },
   { "id": 14, "name": "Mava Malai",     "price": 30, "purchasePrice": 15.60, "category": "Kulfi" },
-  { "id": 28, "name": "American Dry Fruit", "price": 60, "purchasePrice": 60, "category": "Kulfi" },
-  { "id": 29, "name": "Kunafa",         "price": 60, "purchasePrice": 60, "category": "Kulfi" },
+  { "id": 51, "name": "American Dry Fruit", "price": 60, "purchasePrice": 60, "category": "Kulfi" },
+  { "id": 52, "name": "Kunafa",         "price": 60, "purchasePrice": 60, "category": "Kulfi" },
 
   { "id": 15, "name": "Dharmi Special", "price": 55, "purchasePrice": 23.63, "category": "Ice Cream" },
   { "id": 16, "name": "Rajbhog",        "price": 50, "purchasePrice": 21.36, "category": "Ice Cream" },
@@ -26,7 +26,7 @@
   { "id": 22, "name": "Jamun",          "price": 40, "purchasePrice": 20.90, "category": "Ice Cream" },
   { "id": 23, "name": "Strawberry",     "price": 40, "purchasePrice": 20.90, "category": "Ice Cream" },
   { "id": 24, "name": "Mava Malai",     "price": 35, "purchasePrice": 14.54, "category": "Ice Cream" },
-  { "id": 30, "name": "Chocolate Ice Cream", "price": 40, "purchasePrice": 40, "category": "Ice Cream" },
+  { "id": 50, "name": "Chocolate Ice Cream", "price": 40, "purchasePrice": 40, "category": "Ice Cream" },
 
   { "id": 25, "name": "Plain Lassi",    "price": 45, "purchasePrice": 25.00, "category": "Lassi" },
   { "id": 26, "name": "Pista Lassi",    "price": 55, "purchasePrice": 27.00, "category": "Lassi" },
